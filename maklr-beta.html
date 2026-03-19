@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maklr.io — Beta</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#2563EB;--blue-h:#1D4ED8;--blue-bg:#EFF6FF;--blue-bd:rgba(37,99,235,0.2);
+  --ink:#111827;--dark:#374151;--mid:#6B7280;--light:#9CA3AF;
+  --line:#E5E7EB;--bg:#F9FAFB;--white:#FFFFFF;
+  --green:#059669;--green-bg:#ECFDF5;
+  --amber:#D97706;--amber-bg:#FFFBEB;
+  --red:#DC2626;--red-bg:#FEF2F2;
+  --sh1:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --sh2:0 4px 16px rgba(0,0,0,0.07),0 1px 4px rgba(0,0,0,0.04);
+  --sh3:0 12px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);display:flex;min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;}
+
+/* ── SIDEBAR ── */
+.sb{width:224px;flex-shrink:0;background:var(--white);border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-logo{padding:1.375rem 1.25rem;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:0.625rem;}
+.logo-txt{font-size:1.05rem;font-weight:700;color:var(--ink);letter-spacing:-0.03em;}
+.logo-txt span{color:var(--blue);}
+.logo-sub{font-size:0.58rem;font-weight:500;color:var(--light);text-transform:uppercase;letter-spacing:0.12em;margin-top:0.15rem;}
+.sb-user{padding:0.875rem 1.25rem;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:0.625rem;}
+.av{width:30px;height:30px;border-radius:7px;background:var(--blue);color:white;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.uname{font-size:0.8rem;font-weight:600;color:var(--ink);}
+.uplan{font-size:0.62rem;color:var(--light);display:flex;align-items:center;gap:0.3rem;margin-top:0.05rem;}
+.uplan::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.sb-nav{padding:0.875rem 0.75rem;flex:1;}
+.nl{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:var(--light);padding:0 0.5rem;margin:1rem 0 0.375rem;}
+.nl:first-child{margin-top:0;}
+.ni{display:flex;align-items:center;gap:0.5rem;padding:0.475rem 0.625rem;border-radius:6px;font-size:0.8rem;font-weight:400;color:var(--mid);cursor:pointer;transition:all 0.1s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;}
+.ni:hover{background:var(--bg);color:var(--ink);}
+.ni.on{background:var(--blue-bg);color:var(--blue);font-weight:600;}
+.nbadge{margin-left:auto;font-size:0.58rem;font-weight:600;background:var(--bg);color:var(--light);padding:0.1rem 0.4rem;border-radius:20px;border:1px solid var(--line);}
+.ni.on .nbadge{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-bd);}
+.nnew{margin-left:auto;font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--blue);color:white;padding:0.1rem 0.4rem;border-radius:3px;}
+.sb-foot{padding:0.875rem 1.25rem;border-top:1px solid var(--line);}
+.qrow{display:flex;justify-content:space-between;margin-bottom:0.35rem;}
+.ql{font-size:0.62rem;color:var(--light);}
+.qv{font-size:0.62rem;font-weight:600;color:var(--dark);}
+.qbar{height:3px;background:var(--line);border-radius:2px;overflow:hidden;}
+.qfill{height:100%;width:67%;background:var(--blue);border-radius:2px;}
+
+/* ── MAIN ── */
+.mw{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{height:54px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;position:sticky;top:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);z-index:50;}
+.tb-t{font-size:0.875rem;font-weight:600;color:var(--ink);}
+.tbr{display:flex;gap:0.5rem;}
+
+/* ── API KEY BANNER ── */
+.api-banner{background:var(--amber-bg);border-bottom:1px solid rgba(217,119,6,0.2);padding:0.625rem 1.75rem;display:flex;align-items:center;gap:0.75rem;font-size:0.78rem;color:var(--amber);}
+.api-banner strong{font-weight:600;}
+.api-banner input{flex:1;max-width:420px;padding:0.35rem 0.625rem;border:1px solid rgba(217,119,6,0.3);border-radius:5px;font-size:0.78rem;font-family:'Inter',sans-serif;background:white;color:var(--ink);outline:none;}
+.api-banner input:focus{border-color:var(--amber);}
+.api-save{padding:0.35rem 0.75rem;background:var(--amber);color:white;border:none;border-radius:5px;font-size:0.75rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.api-save:hover{background:#B45309;}
+.api-banner.hidden{display:none;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:0.35rem;padding:0.475rem 1rem;border-radius:7px;font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.1s;border:none;}
+.bb{background:var(--blue);color:white;}
+.bb:hover{background:var(--blue-h);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.35);}
+.bo{background:white;color:var(--dark);border:1px solid var(--line);box-shadow:var(--sh1);}
+.bo:hover{border-color:#D1D5DB;background:var(--bg);}
+.bg{background:transparent;color:var(--mid);}
+.bg:hover{color:var(--ink);}
+.bgreen{background:var(--green);color:white;}
+.bgreen:hover{background:#047857;}
+.btn-sm{padding:0.35rem 0.8rem;font-size:0.73rem;}
+.btn-xs{padding:0.25rem 0.6rem;font-size:0.7rem;}
+
+/* ── PAGES ── */
+.sa{flex:1;overflow-y:auto;}
+.sa::-webkit-scrollbar{width:4px;}
+.sa::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
+.page{display:none;}
+.page.on{display:block;animation:up 0.18s ease;}
+@keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── DASHBOARD ── */
+.dash-hero{padding:2.5rem 1.75rem 2rem;background:white;border-bottom:1px solid var(--line);}
+.dh-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:var(--blue);margin-bottom:0.625rem;}
+.dh-title{font-size:2.25rem;font-weight:800;letter-spacing:-0.04em;line-height:1.05;color:var(--ink);}
+.dh-title em{font-style:italic;font-weight:300;color:var(--light);}
+.dh-sub{font-size:0.8rem;color:var(--mid);margin-top:0.625rem;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:white;border-bottom:1px solid var(--line);}
+.sc{padding:1.5rem 1.75rem;border-right:1px solid var(--line);}
+.sc:last-child{border-right:none;}
+.sc-n{font-size:2.4rem;font-weight:800;letter-spacing:-0.05em;line-height:1;color:var(--ink);}
+.sc-n.bl{color:var(--blue);}
+.sc-n.gn{color:var(--green);}
+.sc-l{font-size:0.63rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-top:0.4rem;}
+.sc-d{font-size:0.7rem;color:var(--mid);margin-top:0.15rem;}
+.sc-d.g{color:var(--green);font-weight:500;}
+.sec{padding:1.75rem;}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:0.875rem;border-bottom:1px solid var(--line);}
+.sec-t{font-size:1rem;font-weight:700;color:var(--ink);letter-spacing:-0.02em;}
+.sec-l{font-size:0.73rem;font-weight:600;color:var(--blue);cursor:pointer;}
+.sec-l:hover{text-decoration:underline;}
+
+/* ── EXPOSE CARDS ── */
+.eg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line);gap:1px;box-shadow:var(--sh1);}
+.ec{background:white;cursor:pointer;transition:background 0.1s;}
+.ec:hover{background:var(--bg);}
+.ec-top{padding:1.25rem 1.25rem 0.875rem;}
+.ec-top.tb{background:var(--blue-bg);}
+.ec-top.td{background:var(--ink);}
+.ec-top.ts{background:var(--bg);}
+.ec-type{font-size:3rem;font-weight:800;letter-spacing:-0.07em;line-height:1;color:rgba(17,24,39,0.06);user-select:none;}
+.ec-top.tb .ec-type{color:rgba(37,99,235,0.1);}
+.ec-top.td .ec-type{color:rgba(255,255,255,0.07);}
+.ec-br{display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem;}
+.ecb{font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:0.18rem 0.5rem;border-radius:3px;}
+.live{background:var(--green);color:white;}
+.draft{background:var(--line);color:var(--mid);}
+.archived{background:transparent;color:var(--light);border:1px solid var(--line);}
+.ec-top.td .draft{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);}
+.ec-views{font-size:0.65rem;color:var(--light);}
+.ec-top.td .ec-views{color:rgba(255,255,255,0.3);}
+.ec-body{padding:0.875rem 1.25rem 0.75rem;}
+.ec-title{font-size:0.85rem;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:0.25rem;letter-spacing:-0.01em;}
+.ec-meta{font-size:0.7rem;color:var(--light);display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.4rem;}
+.ec-price{font-size:1.05rem;font-weight:700;letter-spacing:-0.03em;color:var(--blue);}
+.ec-foot{padding:0.625rem 1.25rem;border-top:1px solid var(--line);display:flex;gap:0.35rem;background:var(--bg);}
+
+/* ── BANNER ── */
+.banner{margin:0 1.75rem 1.75rem;background:var(--blue);border-radius:10px;padding:2rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;box-shadow:0 8px 24px rgba(37,99,235,0.25);}
+.bn-t{font-size:1.2rem;font-weight:700;color:white;letter-spacing:-0.03em;line-height:1.2;margin-bottom:0.25rem;}
+.bn-s{font-size:0.78rem;color:rgba(255,255,255,0.7);}
+.bwb{background:white;color:var(--blue);font-weight:700;white-space:nowrap;}
+.bwb:hover{background:var(--bg);}
+
+/* ── NEW EXPOSE ── */
+.new-wrap{display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 54px);}
+.fc{border-right:1px solid var(--line);background:var(--bg);padding:1.25rem;overflow-y:auto;}
+.oc{position:sticky;top:0;height:calc(100vh - 54px);overflow-y:auto;display:flex;flex-direction:column;background:white;}
+.fsec{background:white;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--sh1);margin-bottom:0.75rem;}
+.fsec:last-child{margin-bottom:0;}
+.fh{padding:1.25rem 1.375rem 1rem;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:1rem;}
+.fnum{font-size:2.5rem;font-weight:800;letter-spacing:-0.06em;color:var(--line);line-height:1;flex-shrink:0;}
+.ft-wrap{flex:1;}
+.ft{font-size:0.875rem;font-weight:600;color:var(--ink);}
+.fs{font-size:0.72rem;color:var(--mid);margin-top:0.1rem;}
+.fbody{padding:1.25rem 1.375rem;}
+
+/* ── UPLOAD ── */
+.upz{border:2px dashed var(--line);border-radius:8px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--bg);}
+.upz:hover,.upz.drag{border-color:var(--blue);background:var(--blue-bg);}
+.upz-ico{font-size:1.75rem;color:var(--line);line-height:1;margin-bottom:0.5rem;}
+.upz-t{font-size:0.85rem;font-weight:600;color:var(--dark);margin-bottom:0.2rem;}
+.upz-s{font-size:0.7rem;color:var(--light);}
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:0.4rem;margin-top:0.875rem;}
+.pt{aspect-ratio:1;border-radius:6px;overflow:hidden;position:relative;background:var(--line);}
+.pt img{width:100%;height:100%;object-fit:cover;}
+.ptd{position:absolute;top:0.2rem;right:0.2rem;width:18px;height:18px;background:var(--ink);color:white;font-size:0.55rem;border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:0.1s;border:none;}
+.pt:hover .ptd{opacity:1;}
+.ptok{position:absolute;bottom:0;left:0;right:0;background:var(--blue);color:white;font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;text-align:center;padding:0.15rem;}
+
+.ai-strip{border-left:2px solid var(--blue);background:var(--blue-bg);padding:0.625rem 0.875rem;margin-top:0.75rem;font-size:0.75rem;line-height:1.6;color:var(--dark);display:none;border-radius:0 5px 5px 0;}
+.ai-strip.on{display:block;}
+.ai-strip strong{color:var(--blue);font-weight:600;}
+
+/* ── MARKET INLINE ── */
+.mbox{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:1rem;margin-top:0.875rem;display:none;}
+.mbox.on{display:block;}
+.mb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.875rem;}
+.mb-title{font-size:0.78rem;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:0.4rem;}
+.mb-badge{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--blue);color:white;padding:0.1rem 0.4rem;border-radius:3px;}
+.mb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin-bottom:0.875rem;}
+.mb-s{background:white;border:1px solid var(--line);border-radius:6px;padding:0.5rem 0.625rem;}
+.mb-s strong{display:block;font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-bottom:0.15rem;}
+.mb-s span{font-size:0.875rem;font-weight:700;}
+.mb-s span.ok{color:var(--green);}
+.mb-s span.warn{color:var(--amber);}
+.mb-s span.hi{color:var(--red);}
+.mb-bar{height:5px;background:var(--line);border-radius:3px;position:relative;margin-bottom:0.5rem;}
+.mb-dot{position:absolute;top:-4px;width:13px;height:13px;border-radius:50%;background:var(--blue);border:2px solid white;box-shadow:0 1px 4px rgba(37,99,235,0.4);}
+.mb-verdict{font-size:0.72rem;font-weight:500;padding:0.45rem 0.75rem;border-radius:5px;}
+.mb-verdict.ok{background:var(--green-bg);color:var(--green);}
+.mb-verdict.warn{background:var(--amber-bg);color:var(--amber);}
+.mb-verdict.hi{background:var(--red-bg);color:var(--red);}
+
+/* ── FIELDS ── */
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.625rem;}
+.ffull{grid-column:1/-1;}
+.field{display:flex;flex-direction:column;gap:0.25rem;}
+.field label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);}
+.field input,.field select,.field textarea{padding:0.575rem 0.8rem;border:1px solid var(--line);border-radius:6px;background:white;color:var(--ink);font-family:'Inter',sans-serif;font-size:0.83rem;font-weight:400;outline:none;transition:border-color 0.1s,box-shadow 0.1s;width:100%;box-shadow:var(--sh1);}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
+.field input::placeholder,.field textarea::placeholder{color:#D1D5DB;}
+.field textarea{resize:vertical;min-height:68px;}
+
+/* ── STYLE SELECTOR ── */
+.sgrp{display:grid;grid-template-columns:repeat(2,1fr);gap:0.5rem;}
+.sopt{padding:0.75rem;border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:all 0.1s;background:white;box-shadow:var(--sh1);}
+.sopt:hover{border-color:#D1D5DB;background:var(--bg);}
+.sopt.sel{border-color:var(--blue);background:var(--blue-bg);}
+.so-r{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.1rem;}
+.so-i{font-size:0.95rem;}
+.so-n{font-size:0.8rem;font-weight:600;color:var(--ink);}
+.so-d{font-size:0.65rem;color:var(--mid);}
+
+/* ── EXPORT BUTTONS ── */
+.exp-g{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;}
+.exp-b{display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.75rem 0.5rem;border:1px solid var(--line);border-radius:8px;cursor:pointer;transition:all 0.1s;background:white;font-family:'Inter',sans-serif;box-shadow:var(--sh1);}
+.exp-b:hover{border-color:#D1D5DB;background:var(--bg);}
+.exp-b.sel{border-color:var(--blue);background:var(--blue-bg);}
+.exp-i{font-size:1.25rem;}
+.exp-n{font-size:0.68rem;font-weight:600;color:var(--ink);}
+.exp-s{font-size:0.6rem;color:var(--light);}
+
+/* ── OUTPUT ── */
+.op-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;text-align:center;}
+.oe-t{font-size:0.875rem;font-weight:600;color:var(--dark);margin-top:1rem;}
+.oe-s{font-size:0.72rem;color:var(--light);margin-top:0.25rem;}
+
+.op-load{padding:1.75rem;display:none;}
+.op-load.on{display:block;}
+.lh{font-size:1.5rem;font-weight:800;letter-spacing:-0.04em;color:var(--ink);margin-bottom:1.25rem;}
+.lh span{color:var(--blue);}
+.lbw{height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin-bottom:1.25rem;}
+.lbar{height:100%;background:var(--blue);animation:lg 3.5s ease forwards;}
+@keyframes lg{from{width:0}to{width:88%}}
+.lstep{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--line);font-size:0.78rem;color:var(--light);}
+.lstep:last-child{border-bottom:none;}
+.lstep.on{color:var(--ink);font-weight:500;}
+.lstep.done{color:var(--green);}
+.lstep-d{width:7px;height:7px;border-radius:50%;background:var(--line);flex-shrink:0;}
+.lstep.on .lstep-d{background:var(--blue);}
+.lstep.done .lstep-d{background:var(--green);}
+
+.op-res{display:none;flex-direction:column;min-height:100%;}
+.op-res.on{display:flex;}
+.or-bar{padding:0.875rem 1.375rem;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:white;position:sticky;top:0;z-index:5;box-shadow:var(--sh1);}
+.or-status{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--green);display:flex;align-items:center;gap:0.35rem;}
+.or-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);}
+.or-body{padding:1.375rem;flex:1;}
+.or-title{font-size:1.35rem;font-weight:700;letter-spacing:-0.03em;line-height:1.15;margin-bottom:0.35rem;color:var(--ink);}
+.or-price{font-size:2rem;font-weight:800;letter-spacing:-0.05em;color:var(--blue);line-height:1;margin-bottom:1.125rem;}
+.or-specs{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:7px;overflow:hidden;margin-bottom:1.125rem;box-shadow:var(--sh1);}
+.or-spec{padding:0.575rem 0.75rem;border-right:1px solid var(--line);background:var(--bg);}
+.or-spec:last-child{border-right:none;}
+.or-spec strong{display:block;font-size:0.55rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-bottom:0.15rem;}
+.or-spec span{font-size:0.8rem;font-weight:600;color:var(--dark);}
+.or-sec{margin-bottom:1.125rem;}
+.or-sl{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-bottom:0.5rem;}
+.or-sp{font-size:0.8rem;line-height:1.8;color:var(--dark);}
+.or-foot{padding:0.875rem 1.375rem;border-top:1px solid var(--line);display:flex;gap:0.4rem;background:var(--bg);position:sticky;bottom:0;}
+
+/* ── FEEDBACK ── */
+.fb-box{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:1.125rem;margin-top:1.125rem;}
+.fb-t{font-size:0.8rem;font-weight:600;color:var(--ink);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.4rem;}
+.fb-badge{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--amber-bg);color:var(--amber);padding:0.1rem 0.4rem;border-radius:3px;border:1px solid rgba(217,119,6,0.2);}
+.stars{display:flex;gap:0.25rem;margin-bottom:0.875rem;}
+.star{font-size:1.2rem;cursor:pointer;transition:transform 0.1s;filter:grayscale(1);opacity:0.2;}
+.star:hover,.star.on{filter:none;opacity:1;transform:scale(1.1);}
+.fb-chips{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.75rem;}
+.fchip{padding:0.3rem 0.7rem;border:1px solid var(--line);border-radius:20px;cursor:pointer;font-size:0.7rem;font-weight:500;font-family:'Inter',sans-serif;color:var(--mid);background:white;transition:all 0.1s;}
+.fchip:hover{border-color:#D1D5DB;color:var(--dark);}
+.fchip.on{border-color:var(--blue-bd);background:var(--blue-bg);color:var(--blue);}
+.fb-ta{width:100%;padding:0.55rem 0.75rem;border:1px solid var(--line);border-radius:6px;background:white;color:var(--dark);font-family:'Inter',sans-serif;font-size:0.75rem;outline:none;resize:none;transition:border-color 0.1s;}
+.fb-ta:focus{border-color:var(--blue);}
+
+/* ── PUBLIC URL ── */
+.pub-box{background:var(--ink);border-radius:8px;padding:1.125rem;margin-top:1.125rem;}
+.pub-t{font-size:0.8rem;font-weight:600;color:white;margin-bottom:0.625rem;display:flex;align-items:center;gap:0.4rem;}
+.pub-green{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;background:var(--green-bg);color:var(--green);padding:0.1rem 0.4rem;border-radius:3px;}
+.pub-row{display:flex;gap:0.35rem;align-items:center;margin-bottom:0.75rem;}
+.pub-url{flex:1;padding:0.45rem 0.7rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:5px;font-size:0.7rem;color:rgba(255,255,255,0.55);font-family:'Inter',sans-serif;}
+.pub-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;}
+.ps{background:rgba(255,255,255,0.06);border-radius:5px;padding:0.5rem;text-align:center;}
+.ps strong{display:block;font-size:1rem;font-weight:700;letter-spacing:-0.03em;color:white;}
+.ps span{font-size:0.58rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.08em;}
+
+/* ── PILLS ── */
+.pills{display:flex;gap:0.35rem;flex-wrap:wrap;}
+.pill{padding:0.3rem 0.8rem;border-radius:20px;font-size:0.7rem;font-weight:500;border:1px solid var(--line);background:white;color:var(--mid);cursor:pointer;transition:all 0.1s;font-family:'Inter',sans-serif;box-shadow:var(--sh1);}
+.pill:hover{border-color:#D1D5DB;color:var(--dark);}
+.pill.on{background:var(--ink);border-color:var(--ink);color:white;}
+
+/* ── MARKET PAGE ── */
+.mpage{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 54px);}
+.ml{border-right:1px solid var(--line);padding:1.5rem;background:white;}
+.mr{padding:1.5rem;}
+.mc{background:white;border:1px solid var(--line);border-radius:10px;padding:1.375rem;margin-bottom:1rem;box-shadow:var(--sh1);}
+.mc-t{font-size:0.9rem;font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.2rem;}
+.mc-s{font-size:0.72rem;color:var(--mid);margin-bottom:1.125rem;}
+.dchips{display:grid;grid-template-columns:repeat(3,1fr);gap:0.35rem;margin-bottom:0.875rem;}
+.dchip{padding:0.375rem;border:1px solid var(--line);border-radius:5px;font-size:0.7rem;font-weight:600;cursor:pointer;transition:all 0.1s;text-align:center;background:white;color:var(--dark);box-shadow:var(--sh1);}
+.dchip:hover{border-color:#D1D5DB;}
+.dchip.sel{border-color:var(--blue);background:var(--blue-bg);color:var(--blue);}
+.comp-list{display:flex;flex-direction:column;gap:0.625rem;}
+.ci{display:flex;align-items:center;gap:0.875rem;padding:0.875rem 1.125rem;border:1px solid var(--line);border-radius:8px;background:white;transition:all 0.1s;box-shadow:var(--sh1);}
+.ci:hover{border-color:#D1D5DB;box-shadow:var(--sh2);transform:translateY(-1px);}
+.ci-type{font-size:2rem;font-weight:800;letter-spacing:-0.06em;color:var(--line);min-width:3rem;line-height:1;}
+.ci-body{flex:1;}
+.ci-title{font-size:0.8rem;font-weight:600;color:var(--ink);margin-bottom:0.1rem;}
+.ci-meta{font-size:0.68rem;color:var(--light);}
+.ci-right{text-align:right;}
+.ci-price{font-size:0.95rem;font-weight:700;letter-spacing:-0.03em;color:var(--blue);}
+.ci-diff{font-size:0.62rem;font-weight:600;padding:0.12rem 0.4rem;border-radius:3px;margin-top:0.1rem;display:inline-block;}
+.d-ok{background:var(--green-bg);color:var(--green);}
+.d-hi{background:var(--red-bg);color:var(--red);}
+.d-lo{background:var(--amber-bg);color:var(--amber);}
+
+/* ── PORTAL ── */
+.portal-hero{background:var(--ink);padding:2.5rem 2rem;position:relative;overflow:hidden;}
+.portal-hero::after{content:'';position:absolute;top:-80px;right:-60px;width:300px;height:300px;background:radial-gradient(ellipse,rgba(37,99,235,0.2) 0%,transparent 70%);}
+.ph-tag{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.35);margin-bottom:0.5rem;}
+.ph-title{font-size:2.2rem;font-weight:800;letter-spacing:-0.05em;line-height:1.05;color:white;position:relative;z-index:1;}
+.ph-price{font-size:1.75rem;font-weight:300;letter-spacing:-0.04em;color:rgba(255,255,255,0.5);position:relative;z-index:1;margin-top:0.25rem;}
+.portal-body{display:grid;grid-template-columns:1fr 300px;}
+.pm{padding:1.75rem;border-right:1px solid var(--line);}
+.ps-col{padding:1.75rem;background:var(--bg);}
+.portal-photos{display:grid;grid-template-columns:2fr 1fr;gap:0.4rem;margin-bottom:1.75rem;border-radius:8px;overflow:hidden;border:1px solid var(--line);}
+.pph{background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2.5rem;opacity:0.35;}
+.pph.big{grid-row:span 2;min-height:180px;}
+.pph.sm{min-height:90px;}
+.pspecs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:1.75rem;box-shadow:var(--sh1);}
+.psp{background:white;padding:0.75rem 0.875rem;border-right:1px solid var(--line);}
+.psp:last-child{border-right:none;}
+.psp strong{display:block;font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-bottom:0.25rem;}
+.psp span{font-size:1rem;font-weight:700;letter-spacing:-0.03em;color:var(--ink);}
+.pt-text h3{font-size:0.9rem;font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.625rem;}
+.pt-text p{font-size:0.8rem;line-height:1.8;color:var(--dark);margin-bottom:0.875rem;}
+.contact-card{background:white;border:1px solid var(--line);border-radius:10px;padding:1.125rem;margin-bottom:0.875rem;box-shadow:var(--sh2);}
+.cc-t{font-size:0.875rem;font-weight:700;color:var(--ink);letter-spacing:-0.01em;margin-bottom:0.125rem;}
+.cc-s{font-size:0.7rem;color:var(--mid);margin-bottom:0.875rem;}
+.cf{display:flex;flex-direction:column;gap:0.45rem;}
+.cff{display:flex;flex-direction:column;gap:0.2rem;}
+.cfl{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);}
+.cfi{padding:0.5rem 0.7rem;border:1px solid var(--line);border-radius:6px;background:white;color:var(--dark);font-family:'Inter',sans-serif;font-size:0.78rem;outline:none;transition:border-color 0.1s;box-shadow:var(--sh1);}
+.cfi:focus{border-color:var(--blue);}
+.tracker{background:var(--ink);border-radius:8px;padding:0.875rem 1rem;}
+.tr-title{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.3);margin-bottom:0.75rem;}
+.tr-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;}
+.trs{text-align:center;}
+.trs strong{display:block;font-size:1.35rem;font-weight:800;letter-spacing:-0.04em;color:white;}
+.trs span{font-size:0.58rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.08em;}
+
+/* ── EXPORT PAGE ── */
+.exp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0.875rem;margin-bottom:1.75rem;}
+.expc{background:white;border:1px solid var(--line);border-radius:10px;padding:1.375rem;transition:all 0.1s;box-shadow:var(--sh1);}
+.expc:hover{box-shadow:var(--sh2);transform:translateY(-1px);border-color:#D1D5DB;}
+.expc-i{font-size:1.75rem;margin-bottom:0.75rem;}
+.expc-n{font-size:0.9rem;font-weight:700;color:var(--ink);letter-spacing:-0.02em;margin-bottom:0.2rem;}
+.expc-s{font-size:0.7rem;color:var(--mid);margin-bottom:0.875rem;}
+.expc-st{font-size:0.68rem;font-weight:600;margin-bottom:0.75rem;}
+.st-ok{color:var(--green);}
+.st-warn{color:var(--amber);}
+.st-off{color:var(--light);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.25rem;right:1.25rem;z-index:999;background:var(--ink);color:white;padding:0.625rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:500;box-shadow:var(--sh3);transform:translateY(60px);opacity:0;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;}
+.toast::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+.toast.on{transform:translateY(0);opacity:1;}
+
+/* ── SETTINGS PAGE ── */
+.settings-wrap{max-width:560px;display:flex;flex-direction:column;gap:1.75rem;}
+.settings-card{background:white;border:1px solid var(--line);border-radius:10px;padding:1.375rem;box-shadow:var(--sh1);}
+.settings-card h3{font-size:0.875rem;font-weight:700;color:var(--ink);margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--line);}
+
+@media(max-width:1100px){.new-wrap,.portal-body,.mpage{grid-template-columns:1fr;}.oc{position:static;height:auto;}}
+@media(max-width:840px){.sb{display:none;}.stats{grid-template-columns:repeat(2,1fr);}.dh-title{font-size:1.8rem;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo">
+    <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+      <path d="M20 4C20 4 6 13 6 22C6 30 12.5 36 20 36C27.5 36 34 30 34 22C34 13 20 4 20 4Z" fill="#2563EB"/>
+      <path d="M20 11C20 11 11 17.5 11 23C11 27.5 15 31 20 31C25 31 29 27.5 29 23C29 17.5 20 11 20 11Z" fill="white"/>
+      <path d="M13.5 25.5L17 19.5L20 22.5L23 19.5L26.5 25.5" stroke="#2563EB" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="logo-txt">Maklr<span>.io</span></div>
+      <div class="logo-sub">Beta · Property Platform</div>
+    </div>
+  </div>
+  <div class="sb-user">
+    <div class="av">TB</div>
+    <div>
+      <div class="uname">Thomas Brandner</div>
+      <div class="uplan">Pro · Wien</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nl">Workspace</div>
+    <button class="ni on" onclick="nav('dash',this)">Dashboard</button>
+    <button class="ni" onclick="nav('list',this)">Exposés <span class="nbadge">12</span></button>
+    <button class="ni" onclick="nav('new',this)">Neu erstellen</button>
+    <div class="nl">Intelligence</div>
+    <button class="ni" onclick="nav('market',this)">Marktanalyse <span class="nnew">Live</span></button>
+    <button class="ni" onclick="nav('portal',this)">Interessenten-Portal <span class="nnew">New</span></button>
+    <button class="ni" onclick="nav('export',this)">Plattform-Export <span class="nnew">New</span></button>
+    <div class="nl">Account</div>
+    <button class="ni" onclick="nav('tpl',this)">Vorlagen</button>
+    <button class="ni" onclick="nav('team',this)">Team</button>
+    <button class="ni" onclick="nav('set',this)">Einstellungen</button>
+  </nav>
+  <div class="sb-foot">
+    <div class="qrow"><span class="ql">Exposés / Monat</span><span class="qv">67 / 100</span></div>
+    <div class="qbar"><div class="qfill"></div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="mw">
+
+<!-- API KEY BANNER -->
+<div class="api-banner hidden" id="api-banner">
+  <span>⚠️ <strong>API Key fehlt</strong> — trage deinen Anthropic Key ein damit der Generator funktioniert:</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-api03-...">
+  <button class="api-save" onclick="saveKey()">Speichern</button>
+</div>
+
+<div class="topbar">
+  <div class="tb-t" id="tbt">Dashboard</div>
+  <div class="tbr">
+    <button class="btn bo btn-sm" onclick="nav('list',null)">Alle Exposés</button>
+    <button class="btn bb btn-sm" onclick="nav('new',null)">+ Neues Exposé</button>
+  </div>
+</div>
+<div class="sa">
+
+<!-- DASHBOARD -->
+<div class="page on" id="p-dash">
+  <div class="dash-hero">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap">
+      <div>
+        <div class="dh-label">Maklr.io · Beta · Wien</div>
+        <div class="dh-title">Guten Morgen,<br><em>Thomas Brandner.</em></div>
+        <div class="dh-sub" id="dash-date"></div>
+      </div>
+      <button class="btn bb" onclick="nav('new',null)">+ Neues Exposé</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="sc"><div class="sc-n bl">67</div><div class="sc-l">Exposés gesamt</div><div class="sc-d g">↑ +8 diese Woche</div></div>
+    <div class="sc"><div class="sc-n">14</div><div class="sc-l">Live auf Portalen</div><div class="sc-d">willhaben · immo.at</div></div>
+    <div class="sc"><div class="sc-n gn">4.6★</div><div class="sc-l">Ø Bewertung</div><div class="sc-d g">aus Feedback</div></div>
+    <div class="sc"><div class="sc-n">34h</div><div class="sc-l">Zeit gespart</div><div class="sc-d">≈ €1.700 Wert</div></div>
+  </div>
+  <div class="sec">
+    <div class="sec-h"><div class="sec-t">Zuletzt bearbeitet</div><span class="sec-l" onclick="nav('list',null)">Alle ansehen →</span></div>
+    <div class="eg" id="gd"></div>
+  </div>
+  <div class="banner">
+    <div><div class="bn-t">Marktpreis-Check & Interessenten-Portal live.</div><div class="bn-s">Prüfe ob dein Preis marktgerecht ist. Teile Exposés mit direktem Kontaktformular & Live-Tracking.</div></div>
+    <button class="btn bwb" onclick="nav('market',null)">Entdecken →</button>
+  </div>
+</div>
+
+<!-- LIST -->
+<div class="page" id="p-list">
+  <div class="sec">
+    <div class="sec-h">
+      <div class="pills">
+        <button class="pill on" onclick="filt('all',this)">Alle (12)</button>
+        <button class="pill" onclick="filt('live',this)">Live (4)</button>
+        <button class="pill" onclick="filt('draft',this)">Entwurf (6)</button>
+        <button class="pill" onclick="filt('archived',this)">Archiv (2)</button>
+      </div>
+    </div>
+    <div class="eg" id="ga"></div>
+  </div>
+</div>
+
+<!-- NEW EXPOSE -->
+<div class="page" id="p-new">
+<div class="new-wrap">
+<div class="fc">
+
+  <div class="fsec">
+    <div class="fh"><div class="fnum">01</div><div class="ft-wrap"><div class="ft">Fotos hochladen</div><div class="fs">KI analysiert Ausstattung & Zustand automatisch</div></div></div>
+    <div class="fbody">
+      <div class="upz" id="uz" onclick="document.getElementById('fi').click()" ondragover="dv(event)" ondrop="dp(event)" ondragleave="document.getElementById('uz').classList.remove('drag')">
+        <input type="file" id="fi" multiple accept="image/*" style="display:none" onchange="upl(this.files)">
+        <div class="upz-ico">↑</div>
+        <div class="upz-t">Fotos ablegen oder klicken</div>
+        <div class="upz-s">JPG · PNG · max. 10 Bilder — KI analysiert automatisch</div>
+      </div>
+      <div class="pgrid" id="pg"></div>
+      <div class="ai-strip" id="ais"><strong>KI-Analyse —</strong> <span id="ait">analysiere...</span></div>
+    </div>
+  </div>
+
+  <div class="fsec">
+    <div class="fh"><div class="fnum">02</div><div class="ft-wrap"><div class="ft">Objekt-Daten</div><div class="fs">Grundlegende Informationen</div></div></div>
+    <div class="fbody">
+      <div class="fgrid">
+        <div class="field"><label>Objekttyp</label>
+          <select id="ft2">
+            <option value="ETW">Eigentumswohnung</option>
+            <option value="MIETE">Mietwohnung</option>
+            <option value="EFH">Einfamilienhaus</option>
+            <option value="LUXUS">Luxus-Objekt</option>
+            <option value="ANLAGE">Anlageimmobilie</option>
+            <option value="GEWERBE">Gewerbe / Büro</option>
+          </select>
+        </div>
+        <div class="field"><label>Kauf / Miete</label><select id="fo"><option>Kauf</option><option>Miete</option></select></div>
+        <div class="field"><label>Preis</label><input id="fp" placeholder="z.B. 489.000 €" oninput="um()"></div>
+        <div class="field"><label>PLZ / Ort</label><input id="fl" placeholder="z.B. 1080 Wien" oninput="um()"></div>
+        <div class="field"><label>Fläche m²</label><input id="fa" placeholder="87" oninput="um()"></div>
+        <div class="field"><label>Zimmer</label><input id="fr" placeholder="3"></div>
+        <div class="field"><label>Baujahr</label><input id="fy" placeholder="1924"></div>
+        <div class="field"><label>Stockwerk</label><input id="ff" placeholder="3. OG / Lift"></div>
+        <div class="field ffull"><label>Ausstattung & Extras</label><textarea id="fe" placeholder="Stuckdecken, Parkett, Südbalkon, frisch saniert…"></textarea></div>
+      </div>
+      <div class="mbox" id="mb">
+        <div class="mb-head">
+          <div class="mb-title">📊 Marktpreis-Check <span class="mb-badge">Live</span></div>
+          <span style="font-size:0.68rem;color:var(--mid);cursor:pointer" onclick="nav('market',null)">Details →</span>
+        </div>
+        <div class="mb-grid">
+          <div class="mb-s"><strong>Median/m²</strong><span id="mb-med">—</span></div>
+          <div class="mb-s"><strong>Dein Preis/m²</strong><span id="mb-mp" class="ok">—</span></div>
+          <div class="mb-s"><strong>Abweichung</strong><span id="mb-df" class="ok">—</span></div>
+        </div>
+        <div class="mb-bar"><div class="mb-dot" id="mb-dot" style="left:40%"></div></div>
+        <div style="margin-top:0.5rem"></div>
+        <div class="mb-verdict ok" id="mb-v">✓ Marktgerechter Preis</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fsec">
+    <div class="fh"><div class="fnum">03</div><div class="ft-wrap"><div class="ft">Schreibstil</div><div class="fs">Ton & Zielgruppe</div></div></div>
+    <div class="fbody">
+      <div class="sgrp">
+        <div class="sopt sel" onclick="ss(this,'warm')"><div class="so-r"><span class="so-i">🌿</span><span class="so-n">Warm</span></div><div class="so-d">Familie · Erstkäufer</div></div>
+        <div class="sopt" onclick="ss(this,'sachlich')"><div class="so-r"><span class="so-i">◾</span><span class="so-n">Sachlich</span></div><div class="so-d">Investor · Anlage</div></div>
+        <div class="sopt" onclick="ss(this,'luxus')"><div class="so-r"><span class="so-i">◇</span><span class="so-n">Luxuriös</span></div><div class="so-d">€800k+ · diskret</div></div>
+        <div class="sopt" onclick="ss(this,'modern')"><div class="so-r"><span class="so-i">⚡</span><span class="so-n">Modern</span></div><div class="so-d">Neubau · jung</div></div>
+      </div>
+      <button class="btn bb" style="width:100%;justify-content:center;padding:0.8rem;margin-top:0.875rem;font-size:0.83rem" onclick="gen()">
+        ✨ Exposé generieren →
+      </button>
+    </div>
+  </div>
+
+  <div class="fsec">
+    <div class="fh"><div class="fnum">04</div><div class="ft-wrap"><div class="ft">Direktexport</div><div class="fs">Nach dem Generieren auf Portale veröffentlichen</div></div></div>
+    <div class="fbody">
+      <div class="exp-g">
+        <div class="exp-b sel" onclick="this.classList.toggle('sel')"><div class="exp-i">🏠</div><div class="exp-n">willhaben.at</div><div class="exp-s">AT #1</div></div>
+        <div class="exp-b" onclick="this.classList.toggle('sel')"><div class="exp-i">🔑</div><div class="exp-n">immo.at</div><div class="exp-s">Premium AT</div></div>
+        <div class="exp-b" onclick="this.classList.toggle('sel')"><div class="exp-i">🌐</div><div class="exp-n">ImmScout24</div><div class="exp-s">DE / AT</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OUTPUT -->
+<div class="oc">
+  <div class="op-empty" id="ope">
+    <svg width="44" height="44" viewBox="0 0 40 40" fill="none" style="opacity:0.12">
+      <path d="M20 4C20 4 6 13 6 22C6 30 12.5 36 20 36C27.5 36 34 30 34 22C34 13 20 4 20 4Z" fill="#2563EB"/>
+      <path d="M20 11C20 11 11 17.5 11 23C11 27.5 15 31 20 31C25 31 29 27.5 29 23C29 17.5 20 11 20 11Z" fill="white"/>
+      <path d="M13.5 25.5L17 19.5L20 22.5L23 19.5L26.5 25.5" stroke="#2563EB" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="oe-t">Bereit zum Generieren</div>
+    <div class="oe-s">Formular ausfüllen · Fotos hochladen · Generieren</div>
+  </div>
+  <div class="op-load" id="opl">
+    <div class="lh">Gene<span>rating</span>…</div>
+    <div class="lbw"><div class="lbar" id="lbr"></div></div>
+    <div class="lstep on" id="ls1"><div class="lstep-d"></div>Fotos analysieren</div>
+    <div class="lstep" id="ls2"><div class="lstep-d"></div>Bezirks-Kontext laden</div>
+    <div class="lstep" id="ls3"><div class="lstep-d"></div>Marktpreis validieren</div>
+    <div class="lstep" id="ls4"><div class="lstep-d"></div>Claude schreibt Exposé</div>
+    <div class="lstep" id="ls5"><div class="lstep-d"></div>Qualitätsprüfung</div>
+  </div>
+  <div class="op-res" id="opr">
+    <div class="or-bar">
+      <div class="or-status">Exposé fertig</div>
+      <div style="display:flex;gap:0.35rem">
+        <button class="btn bo btn-xs" onclick="cp()">Kopieren</button>
+        <button class="btn bo btn-xs" onclick="dlPdf()">PDF</button>
+        <button class="btn bb btn-xs" onclick="sv()">Speichern</button>
+      </div>
+    </div>
+    <div class="or-body" id="orb"></div>
+    <div class="or-foot">
+      <button class="btn bo btn-sm" onclick="resetGen()">↺ Neu generieren</button>
+      <button class="btn bb btn-sm" style="flex:1;justify-content:center" onclick="sv()">💾 Speichern</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- MARKET -->
+<div class="page" id="p-market">
+  <div class="mpage">
+    <div class="ml">
+      <div class="mc">
+        <div class="mc-t">Preisanalyse</div>
+        <div class="mc-s">Echtzeit-Vergleich mit aktuellen Preisdaten</div>
+        <div class="fgrid" style="margin-bottom:1rem">
+          <div class="field ffull"><label>Angebotspreis</label><input id="mpp" placeholder="€ 489.000" oninput="cm()"></div>
+          <div class="field"><label>Fläche m²</label><input id="mpa" placeholder="87" oninput="cm()"></div>
+          <div class="field"><label>Typ</label><select id="mpt" onchange="cm()"><option>ETW</option><option>EFH</option><option>Miete</option></select></div>
+        </div>
+        <div style="font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--light);margin-bottom:0.5rem">Bezirk wählen</div>
+        <div class="dchips">
+          <div class="dchip sel" onclick="sd(this,'1010')">1010</div>
+          <div class="dchip" onclick="sd(this,'1020')">1020</div>
+          <div class="dchip" onclick="sd(this,'1030')">1030</div>
+          <div class="dchip" onclick="sd(this,'1040')">1040</div>
+          <div class="dchip" onclick="sd(this,'1050')">1050</div>
+          <div class="dchip" onclick="sd(this,'1060')">1060</div>
+          <div class="dchip" onclick="sd(this,'1070')">1070</div>
+          <div class="dchip" onclick="sd(this,'1080')">1080</div>
+          <div class="dchip" onclick="sd(this,'1090')">1090</div>
+          <div class="dchip" onclick="sd(this,'1100')">1100</div>
+          <div class="dchip" onclick="sd(this,'1130')">1130</div>
+          <div class="dchip" onclick="sd(this,'1190')">1190</div>
+        </div>
+        <div id="mres"></div>
+      </div>
+    </div>
+    <div class="mr">
+      <div class="sec-h" style="margin-bottom:1.25rem">
+        <div class="sec-t">Vergleichsobjekte</div>
+        <span style="font-size:0.65rem;font-weight:600;background:var(--green-bg);color:var(--green);padding:0.25rem 0.7rem;border-radius:20px;border:1px solid rgba(5,150,105,0.15)">● Live</span>
+      </div>
+      <div class="comp-list" id="complist">
+        <div class="ci"><div class="ci-type">ETW</div><div class="ci-body"><div class="ci-title">Stilvolle Altbauwohnung, 1010</div><div class="ci-meta">85 m² · 3 Zi · Baujahr 1920</div></div><div class="ci-right"><div class="ci-price">€ 510.000</div><div class="ci-diff d-ok">€ 6.000/m²</div></div></div>
+        <div class="ci"><div class="ci-type">ETW</div><div class="ci-body"><div class="ci-title">Moderne Wohnung Innere Stadt</div><div class="ci-meta">92 m² · 3 Zi · 2019 saniert</div></div><div class="ci-right"><div class="ci-price">€ 690.000</div><div class="ci-diff d-hi">+18% Median</div></div></div>
+        <div class="ci"><div class="ci-type">ETW</div><div class="ci-body"><div class="ci-title">Ringstraßen-Wohnung mit Blick</div><div class="ci-meta">110 m² · 4 Zi · 3. OG</div></div><div class="ci-right"><div class="ci-price">€ 1.250.000</div><div class="ci-diff d-hi">+80% Median</div></div></div>
+        <div class="ci"><div class="ci-type">ETW</div><div class="ci-body"><div class="ci-title">Kompakte Stadtwohnung renoviert</div><div class="ci-meta">65 m² · 2 Zi · frisch saniert</div></div><div class="ci-right"><div class="ci-price">€ 380.000</div><div class="ci-diff d-lo">−8% Median</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAL -->
+<div class="page" id="p-portal">
+  <div class="portal-hero">
+    <div class="ph-tag">maklr.io/e/josefstadt-87qm · Öffentliche Ansicht</div>
+    <div class="ph-title">Charmante Altbauwohnung<br>Josefstadt — 1080 Wien</div>
+    <div class="ph-price">€ 489.000,–</div>
+  </div>
+  <div class="portal-body">
+    <div class="pm">
+      <div class="portal-photos">
+        <div class="pph big">🏢</div>
+        <div class="pph sm">🛋️</div>
+        <div class="pph sm">🚿</div>
+      </div>
+      <div class="pspecs">
+        <div class="psp"><strong>Fläche</strong><span>87 m²</span></div>
+        <div class="psp"><strong>Zimmer</strong><span>3</span></div>
+        <div class="psp"><strong>Baujahr</strong><span>1924</span></div>
+        <div class="psp"><strong>Stockwerk</strong><span>3. OG</span></div>
+      </div>
+      <div class="pt-text">
+        <h3>Über diese Wohnung</h3>
+        <p>Diese außergewöhnliche Eigentumswohnung im 8. Bezirk vereint den Charme des Wiener Altbaus mit zeitgemäßem Wohnkomfort. Originale Stuckdecken, restaurierter Eichenparkett und Raumhöhen von über 3,20 Metern schaffen eine einzigartige Atmosphäre.</p>
+        <p>Auf 87 m² verteilen sich drei lichtdurchflutete Zimmer, eine großzügige Wohnküche und zwei Bäder. Der Südbalkon bietet einen ruhigen Blick über die Wiener Innenhöfe.</p>
+        <h3 style="margin-bottom:0.625rem">Highlights</h3>
+        <p>· Originale Stuckdecken & Eichenparkett<br>· Südbalkon mit Innenhofblick · Vollständig renoviert<br>· Lift · Kellerabteil · U3 Volkstheater: 4 min</p>
+      </div>
+    </div>
+    <div class="ps-col">
+      <div class="contact-card">
+        <div class="cc-t">Besichtigung anfragen</div>
+        <div class="cc-s">Wir melden uns innerhalb von 24h</div>
+        <div class="cf">
+          <div class="cff"><div class="cfl">Name</div><input class="cfi" placeholder="Max Mustermann"></div>
+          <div class="cff"><div class="cfl">E-Mail</div><input class="cfi" placeholder="max@email.at"></div>
+          <div class="cff"><div class="cfl">Telefon</div><input class="cfi" placeholder="+43 …"></div>
+          <div class="cff"><div class="cfl">Nachricht</div><textarea class="cfi" rows="3" placeholder="Wann sind Sie verfügbar?"></textarea></div>
+          <button class="btn bb" style="width:100%;justify-content:center;padding:0.7rem" onclick="toast('✓ Anfrage gesendet! Wir melden uns innerhalb von 24h.')">Anfrage senden →</button>
+        </div>
+      </div>
+      <div style="font-size:0.68rem;color:var(--light);text-align:center;margin-bottom:0.875rem">Brandner Immobilien · +43 1 234 56 78</div>
+      <div class="tracker">
+        <div class="tr-title">Live-Tracking — nur für dich sichtbar</div>
+        <div class="tr-stats">
+          <div class="trs"><strong>247</strong><span>Aufrufe</span></div>
+          <div class="trs"><strong>38</strong><span>Anfragen</span></div>
+          <div class="trs"><strong>4:12</strong><span>Verweildauer</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT -->
+<div class="page" id="p-export">
+  <div class="sec">
+    <div class="sec-h"><div class="sec-t">Plattform-Export</div></div>
+    <div class="exp-cards">
+      <div class="expc"><div class="expc-i">🏠</div><div class="expc-n">willhaben.at</div><div class="expc-s">Österreichs größtes Immobilienportal</div><div class="expc-st st-ok">● Verbunden</div><button class="btn bgreen btn-sm" style="width:100%;justify-content:center" onclick="toast('✓ Exposé zu willhaben.at exportiert!')">Jetzt exportieren</button></div>
+      <div class="expc"><div class="expc-i">🔑</div><div class="expc-n">immo.at</div><div class="expc-s">Premium-Portal Österreich</div><div class="expc-st st-warn">● API-Key fehlt</div><button class="btn bo btn-sm" style="width:100%;justify-content:center" onclick="nav('set',null)">Verbinden</button></div>
+      <div class="expc"><div class="expc-i">🌐</div><div class="expc-n">ImmobilienScout24</div><div class="expc-s">Größtes Portal DE / AT</div><div class="expc-st st-off">● Nicht verbunden</div><button class="btn bo btn-sm" style="width:100%;justify-content:center" onclick="nav('set',null)">Verbinden</button></div>
+    </div>
+    <div class="banner">
+      <div><div class="bn-t">Ein Klick. Alle Portale.</div><div class="bn-s">API-Keys verbinden und direkt aus Maklr.io exportieren.</div></div>
+      <button class="btn bwb btn-sm" onclick="nav('set',null)">API-Keys →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATES -->
+<div class="page" id="p-tpl">
+  <div class="sec">
+    <div class="sec-h"><div class="sec-t">Vorlagen</div></div>
+    <div class="eg">
+      <div class="ec"><div class="ec-top tb"><div class="ec-type">ETW</div><div class="ec-br"><span class="ecb live">Beliebt</span></div></div><div class="ec-body"><div class="ec-title">Altbau-ETW Wien Standard</div><div class="ec-meta"><span>Stil: warm</span><span>Erstkäufer</span></div></div><div class="ec-foot"><button class="btn bo btn-xs" onclick="loadTpl('altbau')">Verwenden →</button></div></div>
+      <div class="ec"><div class="ec-top td"><div class="ec-type">EFH</div><div class="ec-br"><span class="ecb draft">Standard</span></div></div><div class="ec-body"><div class="ec-title">Einfamilienhaus Niederösterreich</div><div class="ec-meta"><span>Stil: warm</span><span>Familie</span></div></div><div class="ec-foot"><button class="btn bo btn-xs" onclick="loadTpl('efh')">Verwenden →</button></div></div>
+      <div class="ec"><div class="ec-top tb"><div class="ec-type">ANL</div><div class="ec-br"><span class="ecb live">Rendite</span></div></div><div class="ec-body"><div class="ec-title">Vorsorgewohnung Investor</div><div class="ec-meta"><span>Stil: sachlich</span><span>4,2% Rendite</span></div></div><div class="ec-foot"><button class="btn bo btn-xs" onclick="loadTpl('anlage')">Verwenden →</button></div></div>
+      <div class="ec"><div class="ec-top ts"><div class="ec-type">LUXUS</div><div class="ec-br"><span class="ecb draft">Premium</span></div></div><div class="ec-body"><div class="ec-title">Luxus-Penthouse Wien</div><div class="ec-meta"><span>Stil: luxuriös</span><span>€800k+</span></div></div><div class="ec-foot"><button class="btn bo btn-xs" onclick="loadTpl('luxus')">Verwenden →</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="page" id="p-team">
+  <div class="sec" style="max-width:500px">
+    <div class="sec-h"><div class="sec-t">Team</div></div>
+    <div style="background:white;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:var(--sh1)">
+      <div style="display:flex;align-items:center;gap:0.75rem;padding:1rem 1.125rem;border-bottom:1px solid var(--line)">
+        <div class="av">TB</div>
+        <div style="flex:1"><div style="font-size:0.82rem;font-weight:600;color:var(--ink)">Thomas Brandner</div><div style="font-size:0.68rem;color:var(--light)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="97fff6fbfbf8d7faf6fcfbe5b9fef8">[email&#160;protected]</a></div></div>
+        <span style="font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--blue);color:white;padding:0.18rem 0.5rem;border-radius:4px">Owner</span>
+      </div>
+    </div>
+    <button class="btn bo" style="width:100%;justify-content:center;margin-top:0.75rem" onclick="toast('Einladung versenden — kommt bald!')">+ Mitglied einladen</button>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="p-set">
+  <div class="sec">
+    <div class="settings-wrap">
+      <div class="settings-card">
+        <h3>🔑 API Keys</h3>
+        <div class="fgrid">
+          <div class="field ffull">
+            <label>Anthropic API Key (für KI-Generator)</label>
+            <input type="password" id="api-key-settings" placeholder="sk-ant-api03-...">
+          </div>
+          <div class="field ffull">
+            <label>willhaben.at API Key</label>
+            <input type="password" placeholder="wh_live_...">
+          </div>
+          <div class="field ffull">
+            <label>immo.at API Key</label>
+            <input placeholder="Noch nicht verbunden…">
+          </div>
+        </div>
+        <button class="btn bb" style="margin-top:1rem" onclick="saveKeyFromSettings()">Speichern</button>
+      </div>
+      <div class="settings-card">
+        <h3>🏢 Büro-Profil</h3>
+        <div class="fgrid">
+          <div class="field"><label>Firmenname</label><input value="Brandner Immobilien"></div>
+          <div class="field"><label>Telefon</label><input value="+43 1 234 56 78"></div>
+          <div class="field ffull"><label>E-Mail</label><input value="hallo@maklr.io"></div>
+          <div class="field ffull"><label>Kontakttext</label><textarea>Für eine unverbindliche Besichtigung stehen wir Ihnen gerne zur Verfügung.</textarea></div>
+        </div>
+        <button class="btn bb" style="margin-top:1rem" onclick="toast('✓ Profil gespeichert!')">Speichern</button>
+      </div>
+      <div class="settings-card">
+        <h3>🤖 KI-Einstellungen</h3>
+        <div class="fgrid">
+          <div class="field"><label>Standard-Stil</label><select><option>Warm & einladend</option><option>Sachlich</option><option>Luxuriös</option><option>Modern</option></select></div>
+          <div class="field"><label>Region / Sprache</label><select><option>🇦🇹 Österreich (AT)</option><option>🇩🇪 Deutschland (DE)</option><option>🇨🇭 Schweiz (CH)</option></select></div>
+        </div>
+        <button class="btn bb" style="margin-top:1rem" onclick="toast('✓ Einstellungen gespeichert!')">Speichern</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── API KEY MANAGEMENT ──
+
+let apiKey = 'server';
+
+function saveKey() {
+  const v = document.getElementById('api-key-input').value.trim();
+  if (!v || !v.startsWith('sk-ant')) { toast('⚠ Bitte einen gültigen Anthropic API Key eingeben'); return; }
+  apiKey = v;
+  localStorage.setItem('maklr_api_key', v);
+  document.getElementById('api-banner').classList.add('hidden');
+  toast('✓ API Key gespeichert — Generator bereit!');
+}
+function saveKeyFromSettings() {
+  const v = document.getElementById('api-key-settings').value.trim();
+  if (v && v.startsWith('sk-ant')) {
+    apiKey = v;
+    localStorage.setItem('maklr_api_key', v);
+    document.getElementById('api-banner').classList.add('hidden');
+  }
+  toast('✓ Einstellungen gespeichert!');
+}
+// Hide banner if key already saved
+if (apiKey && apiKey !== API_KEY_PLACEHOLDER) {
+  document.getElementById('api-banner').classList.add('hidden');
+}
+
+// ── DATE ──
+const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const months = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const now = new Date();
+document.getElementById('dash-date').textContent = `${days[now.getDay()]}, ${now.getDate()}. ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+// ── EXPOSE DATA ──
+const DATA = [
+  {id:1,title:'Altbauwohnung Josefstadt',type:'ETW',loc:'1080 Wien',area:87,rooms:3,price:'€ 489.000,–',status:'live',style:'tb',views:247},
+  {id:2,title:'Einfamilienhaus Klosterneuburg',type:'EFH',loc:'Klosterneuburg',area:180,rooms:5,price:'€ 790.000,–',status:'draft',style:'td',views:0},
+  {id:3,title:'Luxus-Penthouse 1010',type:'LUXUS',loc:'1010 Wien',area:210,rooms:4,price:'€ 2.850.000,–',status:'live',style:'ts',views:89},
+  {id:4,title:'2-Zimmer Neubau 1070',type:'MIETE',loc:'1070 Wien',area:52,rooms:2,price:'€ 1.150,–/Mo',status:'draft',style:'td',views:0},
+  {id:5,title:'Bürofläche Ringstraße',type:'GEWERBE',loc:'1010 Wien',area:320,rooms:8,price:'€ 28,–/m²',status:'archived',style:'ts',views:12},
+  {id:6,title:'Vorsorgewohnung 4,2%',type:'ANLAGE',loc:'1150 Wien',area:65,rooms:2,price:'€ 285.000,–',status:'draft',style:'tb',views:0},
+];
+const SB = {live:'live',draft:'draft',archived:'archived'};
+const ST = {live:'Live',draft:'Draft',archived:'Arch'};
+
+function card(d) {
+  const vw = d.views ? `<span class="ec-views">👁 ${d.views}</span>` : '';
+  return `<div class="ec" onclick="openExpose(${d.id})">
+    <div class="ec-top ${d.style}"><div class="ec-type">${d.type}</div><div class="ec-br"><span class="ecb ${SB[d.status]}">${ST[d.status]}</span>${vw}</div></div>
+    <div class="ec-body"><div class="ec-title">${d.title}</div><div class="ec-meta"><span>${d.loc}</span><span>${d.area}m²</span><span>${d.rooms}Zi</span></div><div class="ec-price">${d.price}</div></div>
+    <div class="ec-foot">
+      <button class="btn bo btn-xs" onclick="event.stopPropagation();editExpose(${d.id})">Bearbeiten</button>
+      <button class="btn bg btn-xs" onclick="event.stopPropagation();nav('portal',null)">Portal →</button>
+    </div>
+  </div>`;
+}
+
+document.getElementById('gd').innerHTML = DATA.slice(0,3).map(card).join('');
+document.getElementById('ga').innerHTML = DATA.map(card).join('');
+
+function openExpose(id) { editExpose(id); }
+function editExpose(id) {
+  const d = DATA.find(x => x.id === id);
+  if (!d) return;
+  nav('new', null);
+  setTimeout(() => {
+    document.getElementById('ft2').value = d.type;
+    document.getElementById('fp').value = d.price;
+    document.getElementById('fl').value = d.loc;
+    document.getElementById('fa').value = d.area;
+    document.getElementById('fr').value = d.rooms;
+  }, 100);
+}
+
+function filt(s, btn) {
+  document.querySelectorAll('.pill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('ga').innerHTML = (s === 'all' ? DATA : DATA.filter(d => d.status === s)).map(card).join('');
+}
+
+// ── NAV ──
+const T = {dash:'Dashboard',list:'Exposés',new:'Neues Exposé',market:'Marktanalyse',portal:'Interessenten-Portal',export:'Plattform-Export',tpl:'Vorlagen',team:'Team',set:'Einstellungen'};
+function nav(p, el) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(x => x.classList.remove('on'));
+  document.getElementById('p-' + p).classList.add('on');
+  document.getElementById('tbt').textContent = T[p] || p;
+  if (el) el.classList.add('on');
+}
+
+// ── STYLE ──
+let style = 'warm';
+function ss(el, s) { document.querySelectorAll('.sopt').forEach(o => o.classList.remove('sel')); el.classList.add('sel'); style = s; }
+
+// ── PHOTOS ──
+let photos = [], analysis = '';
+function dv(e) { e.preventDefault(); document.getElementById('uz').classList.add('drag'); }
+function dp(e) { e.preventDefault(); document.getElementById('uz').classList.remove('drag'); upl(e.dataTransfer.files); }
+function upl(files) {
+  Array.from(files).slice(0, 10 - photos.length).forEach(f => {
+    if (!f.type.startsWith('image/')) return;
+    const r = new FileReader();
+    r.onload = e => {
+      photos.push({url: e.target.result, b64: e.target.result.split(',')[1], mime: f.type});
+      rph();
+      if (photos.length === 1) ana();
+    };
+    r.readAsDataURL(f);
+  });
+}
+function rph() {
+  document.getElementById('pg').innerHTML = photos.map((p, i) => `
+    <div class="pt"><img src="${p.url}">
+    <button class="ptd" onclick="photos.splice(${i},1);rph()">×</button>
+    <div class="ptok">✓ AI</div></div>`).join('');
+}
+
+async function ana() {
+  const s = document.getElementById('ais'), t = document.getElementById('ait');
+  s.classList.add('on'); t.textContent = 'analysiere Fotos…';
+  if (false) {
+    analysis = 'Fotos erkannt — bitte API Key in Einstellungen eingeben für echte Analyse.';
+    t.textContent = analysis; return;
+  }
+  try {
+    const imgs = photos.slice(0, 3).map(p => ({type:'image', source:{type:'base64', media_type:p.mime, data:p.b64}}));
+    imgs.push({type:'text', text:'Analysiere diese Immobilienfotos kurz auf Österreichisch: Bodenbelag, Ausstattung, Stil, Zustand. 2-3 präzise Sätze für ein Exposé.'});
+    const res = await fetch('/.netlify/functions/generate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','anthropic-version':'2023-06-01','x-api-key': apiKey},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:300, messages:[{role:'user', content:imgs}]})
+    });
+    const d = await res.json();
+    if (d.error) throw new Error(d.error.message);
+    analysis = d.content?.[0]?.text || '';
+    t.textContent = analysis || 'Fotos erfasst.';
+  } catch(e) {
+    analysis = 'Hochwertige Ausstattung sichtbar – gepflegter Zustand, helle Räume.';
+    t.textContent = analysis;
+  }
+}
+
+// ── MARKET DATA ──
+const MD = {
+  '1010':{med:8200,r:[6500,13000],l:'Innere Stadt'},
+  '1020':{med:5100,r:[4200,6500],l:'Leopoldstadt'},
+  '1030':{med:5800,r:[4800,7200],l:'Landstraße'},
+  '1040':{med:6200,r:[5000,8000],l:'Wieden'},
+  '1050':{med:5400,r:[4400,6800],l:'Margareten'},
+  '1060':{med:5900,r:[4800,7500],l:'Mariahilf'},
+  '1070':{med:6100,r:[5000,7800],l:'Neubau'},
+  '1080':{med:6400,r:[5200,8500],l:'Josefstadt'},
+  '1090':{med:6600,r:[5400,9000],l:'Alsergrund'},
+  '1100':{med:4600,r:[3800,5800],l:'Favoriten'},
+  '1130':{med:5500,r:[4500,7000],l:'Hietzing'},
+  '1190':{med:7800,r:[6000,11000],l:'Döbling'},
+};
+let selD = '1010';
+
+function sd(el, d) {
+  document.querySelectorAll('.dchip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel'); selD = d; cm();
+}
+
+function cm() {
+  const p = parseInt((document.getElementById('mpp')?.value || '').replace(/\D/g,'') || 0);
+  const a = parseInt(document.getElementById('mpa')?.value || 0);
+  if (!p || !a || !MD[selD]) return;
+  const d = MD[selD], mp = Math.round(p/a), diff = Math.round((mp/d.med-1)*100);
+  const cl = diff > 15 ? 'hi' : diff > 5 ? 'warn' : 'ok';
+  const vt = diff > 15 ? `⚠ ${diff}% über Marktmedian (${d.l})` : diff < -10 ? `📉 ${Math.abs(diff)}% unter Markt` : `✓ Marktgerecht in ${d.l}`;
+  document.getElementById('mres').innerHTML = `
+    <div style="background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:0.875rem;margin-top:0.75rem">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin-bottom:0.75rem">
+        <div class="mb-s"><strong>Median/m²</strong><span>€${d.med.toLocaleString('de-AT')}</span></div>
+        <div class="mb-s"><strong>Dein/m²</strong><span class="${cl}">€${mp.toLocaleString('de-AT')}</span></div>
+        <div class="mb-s"><strong>Abweichung</strong><span class="${cl}">${diff > 0 ? '+' : ''}${diff}%</span></div>
+      </div>
+      <div class="mb-verdict ${cl}">${vt}</div>
+    </div>`;
+}
+
+function um() {
+  const p = parseInt((document.getElementById('fp')?.value || '').replace(/\D/g,'') || 0);
+  const a = parseInt(document.getElementById('fa')?.value || 0);
+  const loc = document.getElementById('fl')?.value || '';
+  const m = loc.match(/1[0-9]{3}/), d = m ? MD[m[0]] : null;
+  if (!p || !a || !d) { document.getElementById('mb').classList.remove('on'); return; }
+  document.getElementById('mb').classList.add('on');
+  const mp = Math.round(p/a), diff = Math.round((mp/d.med-1)*100), cl = diff > 15 ? 'hi' : diff > 5 ? 'warn' : 'ok';
+  document.getElementById('mb-med').textContent = `€${d.med.toLocaleString('de-AT')}`;
+  const mpe = document.getElementById('mb-mp'); mpe.textContent = `€${mp.toLocaleString('de-AT')}`; mpe.className = cl;
+  const dfe = document.getElementById('mb-df'); dfe.textContent = `${diff > 0 ? '+' : ''}${diff}%`; dfe.className = cl;
+  const pos = Math.min(Math.max((mp - d.r[0]) / (d.r[1] - d.r[0]) * 100, 5), 95);
+  document.getElementById('mb-dot').style.left = pos + '%';
+  const v = document.getElementById('mb-v'); v.className = 'mb-verdict ' + cl;
+  v.textContent = diff > 15 ? `⚠ ${diff}% über Marktmedian` : diff < -10 ? `📉 ${Math.abs(diff)}% unter Markt` : `✓ Marktgerechter Preis — ${d.l}`;
+}
+
+// ── GENERATE ──
+let generated = '';
+async function gen() {
+  const type = document.getElementById('ft2').value;
+  const offer = document.getElementById('fo').value;
+  const price = document.getElementById('fp').value || '450.000 €';
+  const loc = document.getElementById('fl').value || 'Wien';
+  const area = document.getElementById('fa').value || '80';
+  const rooms = document.getElementById('fr').value || '3';
+  const year = document.getElementById('fy').value;
+  const floor = document.getElementById('ff').value;
+  const extra = document.getElementById('fe').value;
+
+  document.getElementById('ope').style.display = 'none';
+  document.getElementById('opr').classList.remove('on');
+  const ol = document.getElementById('opl');
+  ol.classList.add('on');
+  const lb = document.getElementById('lbr');
+  lb.style.animation = 'none'; lb.offsetHeight; lb.style.animation = '';
+
+  const steps = ['ls1','ls2','ls3','ls4','ls5']; let i = 0;
+  const iv = setInterval(() => {
+    if (i > 0) { document.getElementById(steps[i-1]).classList.remove('on'); document.getElementById(steps[i-1]).classList.add('done'); }
+    if (i < steps.length) { document.getElementById(steps[i]).classList.add('on'); i++; }
+    else clearInterval(iv);
+  }, 560);
+
+  const tM = {ETW:'Eigentumswohnung',MIETE:'Mietwohnung',EFH:'Einfamilienhaus',LUXUS:'Luxus-Immobilie',ANLAGE:'Anlageimmobilie',GEWERBE:'Gewerbe/Büro'};
+  const sM = {warm:'warm & einladend',sachlich:'sachlich & präzise',luxus:'luxuriös & diskret',modern:'modern & dynamisch'};
+  const ph = analysis && !analysis.includes('API Key') ? `\nFoto-Analyse: "${analysis}"` : '';
+  const prompt = `Du bist ein professioneller österreichischer Immobilientexter. Stil: ${sM[style]}. Österreichisches Deutsch, keine Superlative, konkrete Fakten.
+Objekt: ${tM[type]||type} (${offer}) | ${price} | ${loc} | ${area}m² | ${rooms}Zi${year?` | Baujahr: ${year}`:''}${floor?` | ${floor}`:''}${extra?`\nAusstattung: ${extra}`:''}${ph}
+
+STRUKTUR exakt:
+TITEL: [max 12 Wörter, prägnant]
+PREIS: [österreichische Schreibweise mit Komma]
+BESCHREIBUNG: [3 Absätze, emotional und präzise]
+HIGHLIGHTS: [7 Bullet Points mit Emoji]
+LAGE: [konkrete Infrastruktur, Gehminuten]
+AUSSTATTUNG: [Details und Materialien]
+KONTAKT: [professioneller Abschluss]`;
+
+  if (false) {
+    clearInterval(iv);
+    steps.forEach(s => { document.getElementById(s).classList.remove('on'); document.getElementById(s).classList.add('done'); });
+    setTimeout(() => { ol.classList.remove('on'); rout(demo(tM[type], price, loc, area, rooms), {type, price, loc, area, rooms, floor, year}); }, 400);
+    return;
+  }
+
+  try {
+    const res = await fetch('/.netlify/functions/generate', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','anthropic-version':'2023-06-01','x-api-key': apiKey},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1200, messages:[{role:'user', content:prompt}]})
+    });
+    const d = await res.json();
+    if (d.error) throw new Error(d.error.message);
+    clearInterval(iv);
+    steps.forEach(s => { document.getElementById(s).classList.remove('on'); document.getElementById(s).classList.add('done'); });
+    setTimeout(() => { ol.classList.remove('on'); rout(d.content?.[0]?.text || demo(tM[type], price, loc, area, rooms), {type, price, loc, area, rooms, floor, year}); }, 300);
+  } catch(e) {
+    clearInterval(iv);
+    setTimeout(() => { ol.classList.remove('on'); rout(demo(tM[type]||type, price, loc, area, rooms), {type, price, loc, area, rooms, floor, year}); toast('⚠ API Fehler — Demo-Modus aktiv'); }, 300);
+  }
+}
+
+function demo(type, price, loc, area, rooms) {
+  const l=loc||'Wien', p=price||'450.000 €', a=area||'80', r=rooms||'3';
+  const ph = analysis && !analysis.includes('API Key') ? ` Die Fotos zeigen: ${analysis}` : '';
+  return `TITEL: Gepflegte ${type} in bevorzugter Lage – ${l}
+PREIS: ${p}
+BESCHREIBUNG: Diese ${type} in ${l} vereint zeitgemäßen Komfort mit einer Lage, die keine Wünsche offenlässt.${ph}
+
+Auf ${a} m² Wohnfläche verteilen sich ${r} lichtdurchflutete Zimmer mit durchdachter Raumaufteilung und hochwertiger Ausstattung.
+
+Die Lage in ${l} bietet ideale Voraussetzungen für angenehmes Stadtleben mit ausgezeichneter Infrastruktur.
+HIGHLIGHTS:
+🏡 Großzügige ${a} m² Wohnfläche
+🌿 Hochwertige Ausstattung in allen Räumen
+🚇 Optimale Verkehrsanbindung
+✨ Lichtdurchflutete, helle Räume
+🔐 Gepflegtes Stiegenhaus
+📦 Kellerabteil inkludiert
+🌳 Ruhige, grüne Wohnlage
+LAGE: ${l} bietet erstklassige Infrastruktur – Einkauf, Schulen und öffentlicher Verkehr fußläufig erreichbar.
+AUSSTATTUNG: Hochwertige Böden, zeitgemäße Bäder, moderne Heizungsanlage mit aktuellem Energieausweis.
+KONTAKT: Für eine unverbindliche Besichtigung erreichen Sie uns unter +43 1 234 56 78 oder hallo@maklr.io.`;
+}
+
+function rout(text, d) {
+  generated = text;
+  const L = text.split('\n');
+  let P = {TITEL:'',PREIS:'',BESCHREIBUNG:'',HIGHLIGHTS:[],LAGE:'',AUSSTATTUNG:'',KONTAKT:''}, cur = '';
+  L.forEach(l => {
+    if (l.startsWith('TITEL:')) {P.TITEL=l.replace('TITEL:','').trim();cur='T';}
+    else if (l.startsWith('PREIS:')) {P.PREIS=l.replace('PREIS:','').trim();cur='P';}
+    else if (l.startsWith('BESCHREIBUNG:')) {P.BESCHREIBUNG=l.replace('BESCHREIBUNG:','').trim();cur='B';}
+    else if (l.startsWith('HIGHLIGHTS:')) {cur='H';}
+    else if (l.startsWith('LAGE:')) {P.LAGE=l.replace('LAGE:','').trim();cur='L';}
+    else if (l.startsWith('AUSSTATTUNG:')) {P.AUSSTATTUNG=l.replace('AUSSTATTUNG:','').trim();cur='A';}
+    else if (l.startsWith('KONTAKT:')) {P.KONTAKT=l.replace('KONTAKT:','').trim();cur='K';}
+    else if (l.trim()) {
+      if (cur==='B') P.BESCHREIBUNG+=' '+l.trim();
+      else if (cur==='H') P.HIGHLIGHTS.push(l.replace(/^[-•]\s*/,'').trim());
+      else if (cur==='L') P.LAGE+=' '+l.trim();
+      else if (cur==='A') P.AUSSTATTUNG+=' '+l.trim();
+      else if (cur==='K') P.KONTAKT+=' '+l.trim();
+    }
+  });
+  const pb = photos.length ? `<span style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--blue);color:white;padding:0.12rem 0.45rem;border-radius:3px;margin-left:0.5rem">📸 ${photos.length} Fotos</span>` : '';
+  const feedHtml = `
+    <div class="fb-box">
+      <div class="fb-t">Wie gut ist das Exposé? <span class="fb-badge">Feedback</span></div>
+      <div style="font-size:0.73rem;color:var(--mid);margin-bottom:0.5rem">Bewertung</div>
+      <div class="stars">${[1,2,3,4,5].map((n,i)=>`<span class="star${i<4?' on':''}" onclick="rs(${n})">★</span>`).join('')}</div>
+      <div style="font-size:0.73rem;color:var(--mid);margin:0.75rem 0 0.4rem">Was hast du geändert?</div>
+      <div class="fb-chips">${['Titel','Preis','Beschreibung','Highlights','Lage','Nichts ✓'].map(c=>`<button class="fchip" onclick="this.classList.toggle('on')">${c}</button>`).join('')}</div>
+      <textarea class="fb-ta" rows="2" placeholder="Optional: Was könnte besser sein?"></textarea>
+      <button class="btn bb btn-sm" style="width:100%;justify-content:center;margin-top:0.625rem" onclick="sendFeedback()">Feedback senden</button>
+    </div>
+    <div class="pub-box">
+      <div class="pub-t">Öffentliche URL <span class="pub-green">Live</span></div>
+      <div class="pub-row">
+        <div class="pub-url">maklr.io/e/${(P.TITEL||'expose').toLowerCase().replace(/[^a-z0-9]/g,'-').slice(0,30)}</div>
+        <button class="btn bo btn-xs" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.55);border-color:rgba(255,255,255,0.1)" onclick="nav('portal',null)">Ansicht →</button>
+        <button class="btn bo btn-xs" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.55);border-color:rgba(255,255,255,0.1)" onclick="toast('✓ Link kopiert!')">Kopieren</button>
+      </div>
+      <div class="pub-stats">
+        <div class="ps"><strong>0</strong><span>Aufrufe</span></div>
+        <div class="ps"><strong>0</strong><span>Anfragen</span></div>
+        <div class="ps"><strong>—</strong><span>Verweildauer</span></div>
+      </div>
+    </div>`;
+
+  document.getElementById('orb').innerHTML = `
+    <div class="or-title">${P.TITEL||'Exposé'}${pb}</div>
+    <div class="or-price">${P.PREIS||d.price}</div>
+    <div class="or-specs">
+      <div class="or-spec"><strong>Fläche</strong><span>${d.area||'—'} m²</span></div>
+      <div class="or-spec"><strong>Zimmer</strong><span>${d.rooms||'—'}</span></div>
+      <div class="or-spec"><strong>Lage</strong><span>${d.loc||'—'}</span></div>
+      ${d.year?`<div class="or-spec"><strong>Baujahr</strong><span>${d.year}</span></div>`:''}
+    </div>
+    ${P.BESCHREIBUNG?`<div class="or-sec"><div class="or-sl">Beschreibung</div><div class="or-sp">${P.BESCHREIBUNG.trim()}</div></div>`:''}
+    ${P.HIGHLIGHTS.length?`<div class="or-sec"><div class="or-sl">Highlights</div><div class="or-sp">${P.HIGHLIGHTS.map(h=>'· '+h).join('<br>')}</div></div>`:''}
+    ${P.LAGE?`<div class="or-sec"><div class="or-sl">Lage</div><div class="or-sp">${P.LAGE.trim()}</div></div>`:''}
+    ${P.AUSSTATTUNG?`<div class="or-sec"><div class="or-sl">Ausstattung</div><div class="or-sp">${P.AUSSTATTUNG.trim()}</div></div>`:''}
+    ${P.KONTAKT?`<div class="or-sec"><div class="or-sl">Kontakt</div><div class="or-sp">${P.KONTAKT.trim()}</div></div>`:''}
+    ${feedHtml}`;
+  document.getElementById('opr').classList.add('on');
+}
+
+function rs(n) { document.querySelectorAll('.star').forEach((s,i)=>{s.classList.toggle('on',i<n);}); }
+function sendFeedback() { toast('✓ Feedback gespeichert — danke!'); }
+function cp() { navigator.clipboard.writeText(generated).then(() => toast('✓ Exposé kopiert!')); }
+function sv() { toast('✓ Exposé gespeichert!'); setTimeout(() => nav('list', null), 1000); }
+function resetGen() {
+  document.getElementById('opr').classList.remove('on');
+  document.getElementById('ope').style.display = '';
+  document.getElementById('opl').classList.remove('on');
+  ['ls1','ls2','ls3','ls4','ls5'].forEach(s => { document.getElementById(s).classList.remove('on','done'); });
+  document.getElementById('ls1').classList.add('on');
+  const lb = document.getElementById('lbr'); lb.style.animation = 'none';
+}
+function dlPdf() { toast('PDF Export — kommt bald in der nächsten Version!'); }
+
+function loadTpl(t) {
+  nav('new', null);
+  setTimeout(() => {
+    if (t==='altbau') { document.getElementById('ft2').value='ETW'; document.getElementById('fl').value='1080 Wien'; document.getElementById('fy').value='1920'; document.getElementById('fe').value='Stuckdecken, Parkett, Südbalkon'; }
+    if (t==='efh') { document.getElementById('ft2').value='EFH'; document.getElementById('fl').value='Niederösterreich'; document.getElementById('fa').value='150'; document.getElementById('fr').value='5'; }
+    if (t==='anlage') { document.getElementById('ft2').value='ANLAGE'; document.getElementById('fe').value='Vorsorgewohnung, befristet vermietet, 4,2% Bruttorendite'; }
+    if (t==='luxus') { document.getElementById('ft2').value='LUXUS'; document.getElementById('fl').value='1010 Wien'; document.getElementById('fa').value='200'; document.getElementById('fp').value='2.500.000 €'; }
+    toast('✓ Vo

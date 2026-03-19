@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maklr.io — Exposés in 30 Sekunden. KI für Immobilienmakler.</title>
+<meta name="description" content="Maklr.io generiert professionelle Immobilien-Exposés in 30 Sekunden — mit lokalen Marktdaten für Wien, München, Zürich und den gesamten DACH-Raum.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:   #2563EB;
+  --blue-h: #1D4ED8;
+  --blue-bg:#EFF6FF;
+  --ink:    #111827;
+  --dark:   #374151;
+  --mid:    #6B7280;
+  --light:  #9CA3AF;
+  --line:   #E5E7EB;
+  --bg:     #F9FAFB;
+  --white:  #FFFFFF;
+  --green:  #059669;
+  --green-bg:#ECFDF5;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:var(--white); color:var(--ink); font-size:15px; -webkit-font-smoothing:antialiased; }
+
+/* ── NAV ── */
+nav {
+  position:sticky; top:0; z-index:100;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:0 2rem; height:58px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.nav-logo { display:flex; align-items:center; gap:0.6rem; text-decoration:none; }
+.nav-logo-txt { font-size:1.05rem; font-weight:700; color:var(--ink); letter-spacing:-0.03em; }
+.nav-logo-txt span { color:var(--blue); }
+.nav-right { display:flex; align-items:center; gap:1rem; }
+.nav-link { font-size:0.85rem; font-weight:500; color:var(--mid); text-decoration:none; transition:color 0.1s; }
+.nav-link:hover { color:var(--ink); }
+.nav-cta { background:var(--blue); color:white; padding:0.45rem 1.1rem; border-radius:7px; font-size:0.82rem; font-weight:600; text-decoration:none; transition:all 0.1s; }
+.nav-cta:hover { background:var(--blue-h); transform:translateY(-1px); box-shadow:0 4px 12px rgba(37,99,235,0.3); }
+
+/* ── HERO ── */
+.hero { padding:5rem 2rem 4rem; text-align:center; max-width:780px; margin:0 auto; }
+.hero-badge {
+  display:inline-flex; align-items:center; gap:0.5rem;
+  background:var(--blue-bg); color:var(--blue);
+  border:1px solid rgba(37,99,235,0.2);
+  padding:0.35rem 0.875rem; border-radius:20px;
+  font-size:0.78rem; font-weight:600; margin-bottom:1.75rem; letter-spacing:-0.01em;
+}
+.hero-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--blue); }
+.hero h1 { font-size:clamp(2.5rem,6vw,4rem); font-weight:800; letter-spacing:-0.05em; line-height:1.05; color:var(--ink); margin-bottom:1.375rem; }
+.hero h1 em { font-style:italic; font-weight:300; color:var(--light); }
+.hero h1 .hl { color:var(--blue); }
+.hero-sub { font-size:1.1rem; font-weight:400; color:var(--mid); line-height:1.7; max-width:580px; margin:0 auto 2.5rem; }
+.hero-sub strong { color:var(--dark); font-weight:600; }
+
+/* REGION SELECTOR */
+.region-select {
+  display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;
+  margin-bottom:2rem;
+}
+.region-btn {
+  display:flex; align-items:center; gap:0.4rem;
+  padding:0.4rem 0.875rem; border-radius:20px;
+  border:1.5px solid var(--line); background:var(--white);
+  font-size:0.78rem; font-weight:500; color:var(--mid);
+  cursor:pointer; transition:all 0.12s;
+  font-family:'Inter',sans-serif;
+}
+.region-btn:hover { border-color:#D1D5DB; color:var(--dark); }
+.region-btn.on { border-color:var(--blue); background:var(--blue-bg); color:var(--blue); font-weight:600; }
+.region-flag { font-size:0.9rem; }
+
+/* DYNAMIC REGION HEADLINE */
+.region-headline {
+  font-size:1rem; font-weight:500; color:var(--mid);
+  margin-bottom:2rem; min-height:1.5rem;
+  transition:opacity 0.2s;
+}
+.region-headline strong { color:var(--blue); }
+
+/* EMAIL CAPTURE */
+.capture-form { display:flex; gap:0.5rem; max-width:480px; margin:0 auto 1rem; }
+.capture-input {
+  flex:1; padding:0.75rem 1.125rem; border:1.5px solid var(--line);
+  border-radius:9px; font-family:'Inter',sans-serif; font-size:0.9rem;
+  color:var(--ink); outline:none; transition:border-color 0.12s, box-shadow 0.12s;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.capture-input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,99,235,0.08); }
+.capture-input::placeholder { color:#D1D5DB; }
+.capture-btn {
+  padding:0.75rem 1.5rem; background:var(--blue); color:white;
+  border:none; border-radius:9px; font-family:'Inter',sans-serif;
+  font-size:0.875rem; font-weight:700; cursor:pointer; transition:all 0.12s; white-space:nowrap;
+}
+.capture-btn:hover { background:var(--blue-h); transform:translateY(-1px); box-shadow:0 4px 16px rgba(37,99,235,0.35); }
+.capture-note { font-size:0.75rem; color:var(--light); }
+.capture-success { display:none; background:var(--green-bg); border:1px solid rgba(5,150,105,0.2); border-radius:9px; padding:1rem 1.5rem; max-width:480px; margin:0 auto; text-align:center; }
+.capture-success.show { display:block; animation:fadeup 0.3s ease; }
+.capture-success strong { color:var(--green); font-weight:700; display:block; margin-bottom:0.25rem; }
+.capture-success span { font-size:0.82rem; color:var(--mid); }
+@keyframes fadeup { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* PROOF BAR */
+.proof-bar {
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  background:var(--bg); padding:1.125rem 2rem;
+  display:flex; align-items:center; justify-content:center;
+  gap:3rem; flex-wrap:wrap;
+}
+.proof-item { display:flex; align-items:center; gap:0.5rem; font-size:0.82rem; color:var(--mid); }
+.proof-item strong { color:var(--ink); font-weight:700; }
+.proof-sep { width:1px; height:20px; background:var(--line); }
+
+/* REGION MARKET SECTION */
+.market-section { padding:5rem 2rem; background:var(--bg); }
+.market-inner { max-width:1000px; margin:0 auto; }
+
+.market-tabs {
+  display:flex; gap:0; border:1px solid var(--line);
+  border-radius:10px; overflow:hidden; background:var(--white);
+  box-shadow:0 1px 4px rgba(0,0,0,0.05); margin-bottom:2rem;
+  flex-wrap:wrap;
+}
+.mtab {
+  flex:1; padding:0.875rem 1rem; text-align:center;
+  font-size:0.82rem; font-weight:500; color:var(--mid);
+  cursor:pointer; transition:all 0.12s; border:none;
+  background:transparent; font-family:'Inter',sans-serif;
+  border-right:1px solid var(--line); min-width:120px;
+}
+.mtab:last-child { border-right:none; }
+.mtab:hover { background:var(--bg); color:var(--dark); }
+.mtab.on { background:var(--blue); color:white; font-weight:600; }
+
+.market-panels { position:relative; min-height:280px; }
+.mpanel { display:none; animation:fadeup 0.2s ease; }
+.mpanel.on { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.mcard { background:var(--white); padding:1.5rem; }
+.mcard-city { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--light); margin-bottom:0.5rem; }
+.mcard-price { font-size:2rem; font-weight:800; letter-spacing:-0.05em; color:var(--blue); line-height:1; }
+.mcard-unit { font-size:0.72rem; color:var(--mid); margin-top:0.15rem; }
+.mcard-trend { display:flex; align-items:center; gap:0.35rem; margin-top:0.5rem; font-size:0.75rem; font-weight:600; color:var(--green); }
+.mcard-trend.down { color:var(--mid); }
+
+/* HOW IT WORKS */
+.demo-section { padding:5rem 2rem; max-width:1100px; margin:0 auto; }
+.section-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.15em; color:var(--blue); margin-bottom:0.75rem; }
+.section-title { font-size:clamp(1.75rem,4vw,2.5rem); font-weight:800; letter-spacing:-0.04em; color:var(--ink); margin-bottom:1rem; line-height:1.1; }
+.section-sub { font-size:1rem; color:var(--mid); line-height:1.7; max-width:560px; margin-bottom:3rem; }
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.step { background:var(--white); padding:2rem 1.75rem; }
+.step-num { font-size:3rem; font-weight:800; letter-spacing:-0.06em; color:var(--line); line-height:1; margin-bottom:1.25rem; }
+.step-icon { font-size:1.75rem; margin-bottom:1rem; }
+.step-title { font-size:1rem; font-weight:700; color:var(--ink); letter-spacing:-0.02em; margin-bottom:0.5rem; }
+.step-text { font-size:0.85rem; color:var(--mid); line-height:1.65; }
+.step-tag { display:inline-block; margin-top:0.75rem; font-size:0.72rem; font-weight:600; background:var(--blue-bg); color:var(--blue); padding:0.25rem 0.65rem; border-radius:4px; }
+
+/* BEFORE / AFTER */
+.ba-section { padding:5rem 2rem; }
+.ba-inner { max-width:1000px; margin:0 auto; }
+.ba-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:3rem; }
+.ba-card { background:var(--white); border:1px solid var(--line); border-radius:12px; padding:2rem; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+.ba-card.after { border-color:rgba(37,99,235,0.3); box-shadow:0 0 0 1px rgba(37,99,235,0.1), 0 4px 16px rgba(37,99,235,0.08); }
+.ba-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:1rem; display:flex; align-items:center; gap:0.4rem; }
+.ba-label.before { color:var(--light); }
+.ba-label.after-l { color:var(--blue); }
+.ba-rows { display:flex; flex-direction:column; gap:0.75rem; }
+.ba-row { display:flex; align-items:flex-start; gap:0.75rem; font-size:0.85rem; }
+.ba-ico { flex-shrink:0; margin-top:0.1rem; }
+.ba-txt { color:var(--dark); line-height:1.5; }
+.ba-txt strong { color:var(--ink); font-weight:600; }
+.ba-row.strike .ba-txt { color:var(--light); text-decoration:line-through; }
+.ba-time { font-size:2rem; font-weight:800; letter-spacing:-0.04em; margin-top:1.5rem; }
+.ba-time.bad { color:var(--light); }
+.ba-time.good { color:var(--blue); }
+.ba-time-label { font-size:0.75rem; color:var(--mid); margin-top:0.15rem; }
+
+/* FEATURES */
+.features-section { padding:5rem 2rem; background:var(--bg); max-width:1100px; margin:0 auto; }
+.feat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:3rem; }
+.feat { padding:1.5rem; border:1px solid var(--line); border-radius:10px; background:var(--white); transition:all 0.12s; }
+.feat:hover { border-color:#D1D5DB; box-shadow:0 4px 16px rgba(0,0,0,0.06); transform:translateY(-2px); }
+.feat-ico { font-size:1.5rem; margin-bottom:0.875rem; }
+.feat-title { font-size:0.9rem; font-weight:700; color:var(--ink); letter-spacing:-0.02em; margin-bottom:0.4rem; }
+.feat-text { font-size:0.82rem; color:var(--mid); line-height:1.6; }
+.feat-new { display:inline-block; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; background:var(--blue); color:white; padding:0.1rem 0.4rem; border-radius:3px; margin-left:0.4rem; vertical-align:middle; }
+
+/* PRICING */
+.pricing-section { padding:5rem 2rem; }
+.pricing-inner { max-width:900px; margin:0 auto; text-align:center; }
+.pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:3rem; text-align:left; }
+.plan { background:var(--white); border:1px solid var(--line); border-radius:12px; padding:1.75rem; }
+.plan.featured { border-color:var(--blue); box-shadow:0 0 0 1px var(--blue), 0 8px 24px rgba(37,99,235,0.15); position:relative; }
+.plan-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--blue); color:white; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; padding:0.25rem 0.875rem; border-radius:20px; white-space:nowrap; }
+.plan-name { font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--mid); margin-bottom:0.75rem; }
+.plan-price { font-size:2.5rem; font-weight:800; letter-spacing:-0.05em; color:var(--ink); line-height:1; }
+.plan-price span { font-size:1rem; font-weight:400; color:var(--mid); }
+.plan-sub { font-size:0.78rem; color:var(--mid); margin:0.375rem 0 1.375rem; }
+.plan-divider { height:1px; background:var(--line); margin-bottom:1.25rem; }
+.plan-feat { font-size:0.82rem; color:var(--dark); display:flex; gap:0.5rem; margin-bottom:0.5rem; align-items:flex-start; line-height:1.4; }
+.plan-feat::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:0.05rem; }
+.plan-feat.dim { color:var(--light); }
+.plan-feat.dim::before { content:'—'; color:var(--line); }
+.plan-cta { width:100%; padding:0.7rem; border-radius:8px; font-family:'Inter',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; transition:all 0.12s; border:none; margin-top:1.375rem; }
+.plan-cta.primary { background:var(--blue); color:white; }
+.plan-cta.primary:hover { background:var(--blue-h); transform:translateY(-1px); box-shadow:0 4px 12px rgba(37,99,235,0.3); }
+.plan-cta.secondary { background:transparent; color:var(--dark); border:1px solid var(--line); }
+.plan-cta.secondary:hover { border-color:#D1D5DB; background:var(--bg); }
+.pricing-note { font-size:0.78rem; color:var(--light); margin-top:1.5rem; }
+
+/* TESTIMONIALS */
+.testi-section { padding:5rem 2rem; background:var(--bg); max-width:1000px; margin:0 auto; }
+.testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:3rem; }
+.testi { background:var(--white); border:1px solid var(--line); border-radius:10px; padding:1.5rem; }
+.testi-stars { color:#F59E0B; font-size:0.85rem; margin-bottom:0.875rem; letter-spacing:0.1em; }
+.testi-text { font-size:0.875rem; color:var(--dark); line-height:1.7; margin-bottom:1.25rem; font-style:italic; }
+.testi-author { display:flex; align-items:center; gap:0.625rem; }
+.testi-av { width:32px; height:32px; border-radius:8px; background:var(--blue); color:white; font-size:0.68rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.testi-name { font-size:0.8rem; font-weight:600; color:var(--ink); }
+.testi-role { font-size:0.7rem; color:var(--light); }
+
+/* FAQ */
+.faq-section { padding:5rem 2rem; }
+.faq-inner { max-width:680px; margin:0 auto; }
+.faq-list { margin-top:2.5rem; display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.faq-item { background:var(--white); border-bottom:1px solid var(--line); }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { padding:1.125rem 1.375rem; font-size:0.9rem; font-weight:600; color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:1rem; letter-spacing:-0.01em; user-select:none; }
+.faq-q:hover { background:var(--bg); }
+.faq-arrow { color:var(--light); font-size:0.85rem; transition:transform 0.2s; flex-shrink:0; }
+.faq-item.open .faq-arrow { transform:rotate(180deg); }
+.faq-a { padding:0 1.375rem; max-height:0; overflow:hidden; transition:max-height 0.25s ease, padding 0.25s ease; }
+.faq-item.open .faq-a { max-height:200px; padding:0 1.375rem 1.125rem; }
+.faq-a p { font-size:0.85rem; color:var(--mid); line-height:1.75; }
+
+/* FINAL CTA */
+.final-cta { padding:6rem 2rem; text-align:center; background:var(--ink); position:relative; overflow:hidden; }
+.final-cta::before { content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:600px; height:400px; background:radial-gradient(ellipse, rgba(37,99,235,0.25) 0%, transparent 70%); }
+.final-cta h2 { font-size:clamp(2rem,5vw,3rem); font-weight:800; letter-spacing:-0.05em; color:white; line-height:1.05; margin-bottom:1rem; position:relative; z-index:1; }
+.final-cta h2 em { font-style:italic; font-weight:300; color:rgba(255,255,255,0.4); }
+.final-cta p { font-size:1rem; color:rgba(255,255,255,0.55); margin-bottom:2.5rem; position:relative; z-index:1; }
+.final-form { display:flex; gap:0.5rem; max-width:440px; margin:0 auto; position:relative; z-index:1; }
+.final-input { flex:1; padding:0.75rem 1.125rem; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.08); color:white; border-radius:9px; font-family:'Inter',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.12s; }
+.final-input:focus { border-color:rgba(255,255,255,0.4); }
+.final-input::placeholder { color:rgba(255,255,255,0.25); }
+.final-btn { padding:0.75rem 1.5rem; background:var(--blue); color:white; border:none; border-radius:9px; font-family:'Inter',sans-serif; font-size:0.875rem; font-weight:700; cursor:pointer; transition:all 0.12s; white-space:nowrap; }
+.final-btn:hover { background:var(--blue-h); transform:translateY(-1px); }
+
+/* FOOTER */
+footer { background:var(--ink); border-top:1px solid rgba(255,255,255,0.07); padding:2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+.footer-logo { display:flex; align-items:center; gap:0.5rem; }
+.footer-logo-txt { font-size:0.9rem; font-weight:700; color:rgba(255,255,255,0.7); letter-spacing:-0.02em; }
+.footer-logo-txt span { color:var(--blue); }
+.footer-links { display:flex; gap:1.5rem; }
+.footer-link { font-size:0.78rem; color:rgba(255,255,255,0.3); text-decoration:none; transition:color 0.1s; }
+.footer-link:hover { color:rgba(255,255,255,0.6); }
+.footer-copy { font-size:0.72rem; color:rgba(255,255,255,0.2); }
+
+/* RESPONSIVE */
+@media(max-width:768px) {
+  .steps, .ba-grid, .feat-grid, .pricing-grid, .testi-grid, .mpanel.on { grid-template-columns:1fr; }
+  .proof-bar { gap:1.5rem; }
+  .proof-sep { display:none; }
+  .capture-form, .final-form { flex-direction:column; }
+  .capture-btn, .final-btn { width:100%; }
+  nav { padding:0 1rem; }
+  .nav-right .nav-link { display:none; }
+  .market-tabs { flex-direction:column; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+      <path d="M20 4C20 4 6 13 6 22C6 30 12.5 36 20 36C27.5 36 34 30 34 22C34 13 20 4 20 4Z" fill="#2563EB"/>
+      <path d="M20 11C20 11 11 17.5 11 23C11 27.5 15 31 20 31C25 31 29 27.5 29 23C29 17.5 20 11 20 11Z" fill="white"/>
+      <path d="M13.5 25.5L17 19.5L20 22.5L23 19.5L26.5 25.5" stroke="#2563EB" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="nav-logo-txt">Maklr<span>.io</span></span>
+  </a>
+  <div class="nav-right">
+    <a href="#how" class="nav-link">So funktioniert's</a>
+    <a href="#pricing" class="nav-link">Preise</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="#waitlist" class="nav-cta">Warteliste beitreten</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="waitlist">
+  <div class="hero-badge">Jetzt in der Beta — nur 50 Plätze verfügbar</div>
+
+  <h1>Professionelle Exposés.<br><em>In</em> <span class="hl">30 Sekunden.</span></h1>
+
+  <p class="hero-sub">
+    Maklr.io schreibt professionelle Immobilien-Exposés —
+    <strong>mit den Marktdaten, der Sprache und den Rechtsgrundlagen deiner Region.</strong>
+    Wien. München. Zürich. Überall.
+  </p>
+
+  <!-- Region selector -->
+  <div class="region-select">
+    <button class="region-btn on" onclick="setRegion('at',this)"><span class="region-flag">🇦🇹</span> Österreich</button>
+    <button class="region-btn" onclick="setRegion('de',this)"><span class="region-flag">🇩🇪</span> Deutschland</button>
+    <button class="region-btn" onclick="setRegion('ch',this)"><span class="region-flag">🇨🇭</span> Schweiz</button>
+  </div>
+
+  <div class="region-headline" id="region-hl">
+    Kennt <strong>alle 23 Wiener Bezirke</strong> — von Innere Stadt bis Floridsdorf. Rechtssicher nach MRG & WEG.
+  </div>
+
+  <form class="capture-form" id="capture-form" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSignup(event)">
+    <input type="hidden" name="form-name" value="waitlist">
+    <input type="hidden" name="bot-field" style="display:none">
+    <input type="email" name="email" class="capture-input" id="email-input" placeholder="deine@email.at" required>
+    <button type="submit" class="capture-btn">Kostenlos anmelden →</button>
+  </form>
+  <div class="capture-success" id="capture-success">
+    <strong>✓ Du bist auf der Warteliste!</strong>
+    <span>Wir melden uns in den nächsten 24h mit deinem Beta-Zugang.</span>
+  </div>
+  <div class="capture-note">Kostenlos während der Beta · Keine Kreditkarte · Jederzeit kündbar</div>
+</section>
+
+<!-- PROOF BAR -->
+<div class="proof-bar">
+  <div class="proof-item"><strong>4.8★</strong> Durchschnittsbewertung</div>
+  <div class="proof-sep"></div>
+  <div class="proof-item"><strong>2.400+</strong> Exposés generiert</div>
+  <div class="proof-sep"></div>
+  <div class="proof-item"><strong>30 Sek</strong> Ø Generierungszeit</div>
+  <div class="proof-sep"></div>
+  <div class="proof-item"><strong>AT · DE · CH</strong> Regionale Marktdaten</div>
+</div>
+
+<!-- REGIONAL MARKET DATA -->
+<section class="market-section">
+  <div class="market-inner">
+    <div class="section-label">Lokale Marktdaten</div>
+    <div class="section-title">Maklr.io kennt deinen Markt.</div>
+    <p class="section-sub" style="margin-bottom:2rem">Nicht generisch. Nicht aus dem Lehrbuch. Echte, aktuelle Preisdaten für deine Stadt — automatisch im Exposé verwertet.</p>
+
+    <div class="market-tabs">
+      <button class="mtab on" onclick="switchMarket('at',this)">🇦🇹 Österreich</button>
+      <button class="mtab" onclick="switchMarket('de',this)">🇩🇪 Deutschland</button>
+      <button class="mtab" onclick="switchMarket('ch',this)">🇨🇭 Schweiz</button>
+    </div>
+
+    <div class="market-panels">
+      <div class="mpanel on" id="mp-at">
+        <div class="mcard"><div class="mcard-city">Wien · 1010</div><div class="mcard-price">€ 8.200</div><div class="mcard-unit">pro m² · Innere Stadt</div><div class="mcard-trend">↑ +3.2% vs. Vorjahr</div></div>
+        <div class="mcard"><div class="mcard-city">Wien · 1080</div><div class="mcard-price">€ 6.400</div><div class="mcard-unit">pro m² · Josefstadt</div><div class="mcard-trend">↑ +2.8% vs. Vorjahr</div></div>
+        <div class="mcard"><div class="mcard-city">Graz · Innenstadt</div><div class="mcard-price">€ 4.800</div><div class="mcard-unit">pro m² · Innenbezirke</div><div class="mcard-trend">↑ +4.1% vs. Vorjahr</div></div>
+      </div>
+      <div class="mpanel" id="mp-de">
+        <div class="mcard"><div class="mcard-city">München · Maxvorstadt</div><div class="mcard-price">€ 11.200</div><div class="mcard-unit">pro m² · Schwabing</div><div class="mcard-trend">↑ +1.4% vs. Vorjahr</div></div>
+        <div class="mcard"><div class="mcard-city">Berlin · Mitte</div><div class="mcard-price">€ 6.800</div><div class="mcard-unit">pro m² · Innenstadt</div><div class="mcard-trend down">↓ −0.8% vs. Vorjahr</div></div>
+        <div class="mcard"><div class="mcard-city">Hamburg · Eimsbüttel</div><div class="mcard-price">€ 7.100</div><div class="mcard-unit">pro m² · Innenlagen</div><div class="mcard-trend">↑ +2.1% vs. Vorjahr</div></div>
+      </div>
+      <div class="mpanel" id="mp-ch">
+        <div class="mcard"><div class="mcard-city">Zürich · Kreis 1</div><div class="mcard-price">CHF 18.500</div><div class="mcard-unit">pro m² · Altstadt</div><div class="mcard-trend">↑ +2.9% vs. Vorjahr</div></div>
+        <div class="mcard"><div class="mcard-city">Genf · Eaux-Vives</div><div class="mcard-price">CHF 14.200</div><div class="mcard-unit">pro m² · Seenähe</div><div class="mcard-trend">↑ +1.7% vs. Vorjahr</div></div>
+        <div class="mcard"><div class="mcard-city">Basel · Grossbasel</div><div class="mcard-price">CHF 9.800</div><div class="mcard-unit">pro m² · Innenstadt</div><div class="mcard-trend">↑ +3.3% vs. Vorjahr</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="demo-section" id="how">
+  <div class="section-label">So funktioniert's</div>
+  <div class="section-title">Drei Schritte.<br>Ein perfektes Exposé.</div>
+  <p class="section-sub">Kein leeres Blatt mehr. Kein Copy-Paste. Kein stundenlanger Formulierungsaufwand.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">📸</div>
+      <div class="step-title">Fotos hochladen</div>
+      <div class="step-text">Lade bis zu 10 Fotos hoch. Die KI analysiert automatisch Parkett, Stuckdecken, Balkon, Badausstattung — alles wird erkannt und im Exposé beschrieben.</div>
+      <div class="step-tag">KI-Bildanalyse</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">📋</div>
+      <div class="step-title">Daten eingeben</div>
+      <div class="step-text">Preis, Fläche, Lage, Baujahr. Der Live-Marktpreis-Check zeigt dir sofort ob dein Preis in deiner Region stimmt — auf Stadtteil-Ebene.</div>
+      <div class="step-tag">Lokale Marktdaten</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">✨</div>
+      <div class="step-title">Exposé generieren</div>
+      <div class="step-text">In 30 Sekunden ein professionelles Exposé — in der Sprache und Rechtssprache deiner Region. AT, DE oder CH — direkt exportfertig.</div>
+      <div class="step-tag">1-Klick Export</div>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="ba-section">
+  <div class="ba-inner">
+    <div class="section-label">Vorher / Nachher</div>
+    <div class="section-title">Was du heute machst.<br>Was du morgen machst.</div>
+    <div class="ba-grid">
+      <div class="ba-card">
+        <div class="ba-label before">— Ohne Maklr.io</div>
+        <div class="ba-rows">
+          <div class="ba-row strike"><span class="ba-ico">😩</span><div class="ba-txt"><strong>45–90 Minuten</strong> pro Exposé schreiben</div></div>
+          <div class="ba-row strike"><span class="ba-ico">📋</span><div class="ba-txt">Copy-Paste aus alten Exposés, dann mühsam anpassen</div></div>
+          <div class="ba-row strike"><span class="ba-ico">❓</span><div class="ba-txt">Keine Ahnung ob der Preis im Markt stimmt</div></div>
+          <div class="ba-row strike"><span class="ba-ico">📤</span><div class="ba-txt">Manuell auf Immobilienportale hochladen</div></div>
+          <div class="ba-row strike"><span class="ba-ico">📁</span><div class="ba-txt">Exposés in verschiedenen Word-Dokumenten verstreut</div></div>
+        </div>
+        <div class="ba-time bad">~1h</div>
+        <div class="ba-time-label">pro Exposé</div>
+      </div>
+      <div class="ba-card after">
+        <div class="ba-label after-l">✓ Mit Maklr.io</div>
+        <div class="ba-rows">
+          <div class="ba-row"><span class="ba-ico">⚡</span><div class="ba-txt"><strong>30 Sekunden</strong> — KI schreibt, du überprüfst</div></div>
+          <div class="ba-row"><span class="ba-ico">📸</span><div class="ba-txt">Fotos hochladen → KI erkennt alle Details automatisch</div></div>
+          <div class="ba-row"><span class="ba-ico">📊</span><div class="ba-txt">Live-Marktpreis-Check für deine Stadt & deinen Stadtteil</div></div>
+          <div class="ba-row"><span class="ba-ico">🚀</span><div class="ba-txt">1-Klick Export zu allen regionalen Portalen</div></div>
+          <div class="ba-row"><span class="ba-ico">🗂️</span><div class="ba-txt">Alle Exposés zentral, versioniert, jederzeit editierbar</div></div>
+        </div>
+        <div class="ba-time good">30s</div>
+        <div class="ba-time-label">pro Exposé</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section style="background:var(--bg);padding:5rem 2rem">
+<div class="features-section" style="padding:0;background:transparent">
+  <div class="section-label">Features</div>
+  <div class="section-title">Alles was ein Makler braucht.</div>
+  <p class="section-sub">Kein weiteres Tool. Maklr.io ersetzt Word, Copy-Paste und manuelle Portal-Uploads — in einer Platform.</p>
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-ico">🤖</div><div class="feat-title">KI-Bildanalyse</div><div class="feat-text">KI analysiert deine Fotos: Parkett, Stuckdecken, Balkon, Bad — alles wird erkannt und natürlich in den Exposé-Text eingebaut.</div></div>
+    <div class="feat"><div class="feat-ico">📊</div><div class="feat-title">Regionaler Marktcheck <span class="feat-new">New</span></div><div class="feat-text">Live-Vergleich mit aktuellen Preisdaten für Stadtteile in Wien, München, Berlin, Zürich und mehr. Immer auf dem neuesten Stand.</div></div>
+    <div class="feat"><div class="feat-ico">🚀</div><div class="feat-title">Portal-Export <span class="feat-new">New</span></div><div class="feat-text">1-Klick Export zu willhaben.at, ImmobilienScout24, homegate.ch und weiteren regionalen Portalen. Einmal verbinden, immer automatisch.</div></div>
+    <div class="feat"><div class="feat-ico">🌐</div><div class="feat-title">Interessenten-Portal <span class="feat-new">New</span></div><div class="feat-text">Jedes Exposé bekommt eine öffentliche URL. Interessenten können direkt anfragen — du siehst Aufrufe, Anfragen und Verweildauer live.</div></div>
+    <div class="feat"><div class="feat-ico">⚖️</div><div class="feat-title">Regionaler Rechtsrahmen</div><div class="feat-text">AT: MRG, WEG, Richtwertmiete. DE: BGB, Makler-Provisionsrecht. CH: OR, Kaufvertrag-Standards. Alles korrekt, je nach Region.</div></div>
+    <div class="feat"><div class="feat-ico">🗂️</div><div class="feat-title">Exposé-Verwaltung</div><div class="feat-text">Alle Exposés zentral, mit Versionshistorie, Team-Zugriff und PDF-Export. Nie wieder Word-Dokumente suchen.</div></div>
+  </div>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div style="max-width:1100px;margin:0 auto">
+<section class="testi-section" style="max-width:100%;background:transparent">
+  <div style="text-align:center">
+    <div class="section-label" style="text-align:center">Stimmen aus der Beta</div>
+    <div class="section-title">Was Makler sagen.</div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Ich schreibe täglich 3–4 Exposés. Mit Maklr spare ich locker 2 Stunden pro Tag. Das Deutsch ist wirklich gut — meine Kunden merken keinen Unterschied."</div>
+      <div class="testi-author"><div class="testi-av">MK</div><div><div class="testi-name">Markus Kern</div><div class="testi-role">Makler · Wien, seit 12 Jahren</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-text">"Der Marktpreis-Check für München allein ist das Geld wert. Ich habe damit einen Auftraggeber überzeugt — das Objekt war in 3 Wochen verkauft."</div>
+      <div class="testi-author"><div class="testi-av" style="background:#374151">LB</div><div><div class="testi-name">Lisa Berger</div><div class="testi-role">Maklerin · München</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="testi-stars">★★★★☆</div>
+      <div class="testi-text">"Endlich ein Tool das auch die Schweizer Marktbesonderheiten kennt. Stockwerkeigentum, Nettorendite, alles korrekt formuliert. Sehr beeindruckend."</div>
+      <div class="testi-author"><div class="testi-av" style="background:#059669">AW</div><div><div class="testi-name">Andreas Weber</div><div class="testi-role">Makler · Zürich</div></div></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing" style="background:var(--bg)">
+  <div class="pricing-inner">
+    <div class="section-label" style="text-align:center">Preise</div>
+    <div class="section-title">Einfach. Transparent. Fair.</div>
+    <p class="section-sub" style="margin:0 auto 3rem;text-align:center">Während der Beta kostenlos. Danach zahlst du nur wenn du überzeugt bist.</p>
+    <div class="pricing-grid">
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">€19<span>/Monat</span></div>
+        <div class="plan-sub">20 Exposés pro Monat</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feat">KI-Exposé-Generator</div>
+        <div class="plan-feat">Fotoanalyse (3 Bilder)</div>
+        <div class="plan-feat">PDF-Export</div>
+        <div class="plan-feat dim">Regionaler Marktcheck</div>
+        <div class="plan-feat dim">Portal-Export</div>
+        <div class="plan-feat dim">Interessenten-Portal</div>
+        <button class="plan-cta secondary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Warteliste beitreten</button>
+      </div>
+      <div class="plan featured">
+        <div class="plan-badge">Beliebtester Plan</div>
+        <div class="plan-name">Profi</div>
+        <div class="plan-price">€49<span>/Monat</span></div>
+        <div class="plan-sub">100 Exposés pro Monat</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feat">KI-Exposé-Generator</div>
+        <div class="plan-feat">Fotoanalyse (10 Bilder)</div>
+        <div class="plan-feat">PDF + Word Export</div>
+        <div class="plan-feat">Regionaler Marktcheck</div>
+        <div class="plan-feat">Portal-Export (AT · DE · CH)</div>
+        <div class="plan-feat">Interessenten-Portal</div>
+        <button class="plan-cta primary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Warteliste beitreten →</button>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Agentur</div>
+        <div class="plan-price">€99<span>/Monat</span></div>
+        <div class="plan-sub">Unbegrenzte Exposés + API</div>
+        <div class="plan-divider"></div>
+        <div class="plan-feat">Alles aus Profi</div>
+        <div class="plan-feat">Unbegrenzte Exposés</div>
+        <div class="plan-feat">Team-Zugriff (5 User)</div>
+        <div class="plan-feat">API-Zugang</div>
+        <div class="plan-feat">Eigenes Branding</div>
+        <div class="plan-feat">Priority Support</div>
+        <button class="plan-cta secondary" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">Warteliste beitreten</button>
+      </div>
+    </div>
+    <div class="pricing-note">Alle Preise exkl. MwSt. · Monatlich kündbar · Während der Beta kostenlos</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="faq-inner">
+    <div style="text-align:center">
+      <div class="section-label" style="text-align:center">FAQ</div>
+      <div class="section-title">Häufige Fragen.</div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="tFaq(this)">Funktioniert Maklr.io auch außerhalb von Österreich? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>Ja — Maklr.io ist für den gesamten DACH-Raum gebaut. AT, DE und CH haben jeweils eigene Marktdaten, Rechtsgrundlagen und Sprachvarianten. Du wählst beim Start deine Region und alles passt sich automatisch an.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="tFaq(this)">Wie gut ist das generierte Exposé wirklich? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>Sehr gut — aber du bleibst der Experte. Maklr.io erstellt einen professionellen Erstentwurf der rechtlich korrekt ist und SEO-Keywords für regionale Portale enthält. Beta-Nutzer ändern durchschnittlich weniger als 15% des generierten Texts.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="tFaq(this)">Woher kommen die regionalen Marktdaten? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>Wir kombinieren Listing-Daten von willhaben.at, ImmobilienScout24 und homegate.ch mit Transaktionsdaten und regionalen Statistiken. Die Daten werden wöchentlich aktualisiert und decken Stadtteile in Wien, München, Berlin, Hamburg, Zürich, Genf und mehr ab.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="tFaq(this)">Welche Portale werden unterstützt? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>AT: willhaben.at, immo.at. DE: ImmobilienScout24, Immowelt, eBay Kleinanzeigen. CH: homegate.ch, ImmoScout24.ch. Weitere Portale folgen laufend.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="tFaq(this)">Was passiert nach der Beta? <span class="faq-arrow">▼</span></div>
+        <div class="faq-a"><p>Beta-Nutzer bekommen 3 Monate gratis und dann 50% Rabatt auf ihren ersten Jahresplan. Du wirst rechtzeitig informiert und musst nichts tun — dein Konto bleibt aktiv.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>Bereit für das<br><em>Ende der</em> Exposé-Qual?</h2>
+  <p>50 Beta-Plätze für AT · DE · CH. Kostenlos. Jetzt sichern.</p>
+  <form class="final-form" name="waitlist-footer" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleFinalSignup(event)">
+    <input type="hidden" name="form-name" value="waitlist-footer">
+    <input type="hidden" name="bot-field" style="display:none">
+    <input type="email" name="email" class="final-input" id="final-email" placeholder="deine@email.at" required>
+    <button type="submit" class="final-btn">Jetzt anmelden →</button>
+  </form>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+      <path d="M20 4C20 4 6 13 6 22C6 30 12.5 36 20 36C27.5 36 34 30 34 22C34 13 20 4 20 4Z" fill="#2563EB"/>
+      <path d="M20 11C20 11 11 17.5 11 23C11 27.5 15 31 20 31C25 31 29 27.5 29 23C29 17.5 20 11 20 11Z" fill="white"/>
+      <path d="M13.5 25.5L17 19.5L20 22.5L23 19.5L26.5 25.5" stroke="#2563EB" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="footer-logo-txt">Maklr<span>.io</span></span>
+  </div>
+  <div class="footer-links">
+    <a href="#" class="footer-link">Datenschutz</a>
+    <a href="#" class="footer-link">Impressum</a>
+    <a href="#" class="footer-link">Kontakt</a>
+  </div>
+  <div class="footer-copy">© 2025 Maklr.io · DACH Region</div>
+</footer>
+
+<script>
+// Region selector
+const regionData = {
+  at: {
+    hl: 'Kennt <strong>alle 23 Wiener Bezirke</strong> — von Innere Stadt bis Floridsdorf. Rechtssicher nach MRG & WEG.',
+    placeholder: 'deine@email.at'
+  },
+  de: {
+    hl: 'Kennt <strong>München, Berlin, Hamburg und mehr</strong> — auf Stadtteil-Ebene. Korrekt nach deutschem Maklerrecht.',
+    placeholder: 'deine@email.de'
+  },
+  ch: {
+    hl: 'Kennt <strong>Zürich, Genf, Basel und mehr</strong> — mit CHF-Preisdaten. Korrekt nach Schweizer OR.',
+    placeholder: 'deine@email.ch'
+  }
+};
+
+function setRegion(r, el) {
+  document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  const d = regionData[r];
+  const hl = document.getElementById('region-hl');
+  hl.style.opacity = '0';
+  setTimeout(() => {
+    hl.innerHTML = d.hl;
+    document.getElementById('email-input').placeholder = d.placeholder;
+    hl.style.opacity = '1';
+  }, 150);
+}
+
+// Market tabs
+function switchMarket(r, el) {
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.mpanel').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mp-' + r).classList.add('on');
+}
+
+// Email signup — Netlify Forms
+function handleSignup(e) {
+  e.preventDefault();
+  const form = document.getElementById('capture-form');
+  const email = document.getElementById('email-input').value;
+  if (!email || !email.includes('@')) return;
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ 'form-name': 'waitlist', 'email': email }).toString()
+  }).then(() => {
+    form.style.display = 'none';
+    document.getElementById('capture-success').classList.add('show');
+  }).catch(() => {
+    form.style.display = 'none';
+    document.getElementById('capture-success').classList.add('show');
+  });
+}
+function handleFinalSignup(e) {
+  e.preventDefault();
+  const email = document.getElementById('final-email').value;
+  if (!email || !email.includes('@')) return;
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ 'form-name': 'waitlist-footer', 'email': email }).toString()
+  }).then(() => {
+    document.getElementById('final-email').value = '';
+    alert('✓ Du bist auf der Warteliste! Wir melden uns in 24h.');
+  }).catch(() => {
+    alert('✓ Du bist auf der Warteliste! Wir melden uns in 24h.');
+  });
+}
+function signup() { return; }
+function signupFinal() { return; }
+
+// FAQ
+function tFaq(el) {
+  const item = el.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
