@@ -811,9 +811,7 @@ function saveKeyFromSettings() {
   toast('✓ Einstellungen gespeichert!');
 }
 // Hide banner if key already saved
-if (apiKey && apiKey !== API_KEY_PLACEHOLDER) {
-  document.getElementById('api-banner').classList.add('hidden');
-}
+document.getElementById('api-banner').classList.add('hidden');
 
 // ── DATE ──
 const days = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
