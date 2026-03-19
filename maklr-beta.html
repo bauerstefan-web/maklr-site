@@ -789,6 +789,32 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);displa
 <div class="toast" id="toast"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+// ── GLOBAL NAV — must be defined first ──
+const T = {dash:'Dashboard',list:'Exposés',new:'Neues Exposé',market:'Marktanalyse',portal:'Interessenten-Portal',export:'Plattform-Export',tpl:'Vorlagen',team:'Team',set:'Einstellungen'};
+function nav(p, el) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(x => x.classList.remove('on'));
+  const target = document.getElementById('p-' + p);
+  if (target) target.classList.add('on');
+  const tbt = document.getElementById('tbt');
+  if (tbt) tbt.textContent = T[p] || p;
+  if (el) el.classList.add('on');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 2500);
+}
+function ss(el, s) { document.querySelectorAll('.sopt').forEach(o => o.classList.remove('sel')); el.classList.add('sel'); style = s; }
+function filt(s, btn) {
+  document.querySelectorAll('.pill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const ga = document.getElementById('ga');
+  if (ga) ga.innerHTML = (s === 'all' ? DATA : DATA.filter(d => d.status === s)).map(card).join('');
+}
+
 // ── API KEY MANAGEMENT ──
 
 let apiKey = 'server';
@@ -866,15 +892,7 @@ function filt(s, btn) {
   document.getElementById('ga').innerHTML = (s === 'all' ? DATA : DATA.filter(d => d.status === s)).map(card).join('');
 }
 
-// ── NAV ──
-const T = {dash:'Dashboard',list:'Exposés',new:'Neues Exposé',market:'Marktanalyse',portal:'Interessenten-Portal',export:'Plattform-Export',tpl:'Vorlagen',team:'Team',set:'Einstellungen'};
-function nav(p, el) {
-  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
-  document.querySelectorAll('.ni').forEach(x => x.classList.remove('on'));
-  document.getElementById('p-' + p).classList.add('on');
-  document.getElementById('tbt').textContent = T[p] || p;
-  if (el) el.classList.add('on');
-}
+// ── NAV defined at top of script ──
 
 // ── STYLE ──
 let style = 'warm';
